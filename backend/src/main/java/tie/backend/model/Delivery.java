@@ -1,18 +1,57 @@
 package tie.backend.model;
 
-import jakarta.persistence.GeneratedValue;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "delivery")
 public class Delivery {
-    @GeneratedValue
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "store_name")
     private String storeName;
+
+    @Column(name = "user_name")
     private String userName;
+
+    @Column(name = "user_email")
     private String userEmail;
+
+    @Column(name = "package_id")
     private Long packageId;
+
+    // @ManyToOne
+    // @JoinColumn(name = "company_id")
+    // private PickupPoint pickupPoint;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pickup_point_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PickupPoint pickupPoint;
+
+    @Column(name = "status")
     private DeliveryStatus status;
+
+    @Column(name = "registery_date")
     private String registeryDate;
+
+    @Column(name = "delivery_date")
     private String deliveryDate;
+
+    @Column(name = "pickup_date")
     private String pickupDate;
 
     public Delivery(){}

@@ -19,15 +19,16 @@ services:
       - MYSQL_PASSWORD=tie
     networks:
       - tie_network
-    # healthcheck:
-    #   test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "3306", "-u", "root", "-proot"]
-    #   interval: 30s
-    #   timeout: 10s
-    #   retries: 3
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "3306", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
 
   take_it_easy:
     depends_on:
-      - mysql_tie
+      mysql_tie:
+        condition: service_healthy
     build: ./backend
     container_name: TIE_BACKEND
     restart: unless-stopped

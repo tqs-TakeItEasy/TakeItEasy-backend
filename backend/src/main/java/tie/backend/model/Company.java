@@ -1,30 +1,50 @@
 package tie.backend.model;
 
-import java.util.ArrayList;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "company")
 public class Company {
-    private String Name;
-    private String Email;
-    private ArrayList<PickupPoint> pickupPoints;
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "email", unique = true)
+    private String email;
+
+    // @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private List<PickupPoint> pickupPoints;
+
+    // @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    // private List<Notification> notifications;
 
     public Company(){}
 
     public String getEmail() {
-        return Email;
+        return email;
     }
     public String getName() {
-        return Name;
+        return name;
     }
-    public ArrayList<PickupPoint> getPickupPoints() {
-        return pickupPoints;
-    }
+    // public List<PickupPoint> getPickupPoints() {
+    //     return pickupPoints;
+    // }
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
-    public void setPickupPoints(ArrayList<PickupPoint> pickupPoints) {
-        this.pickupPoints = pickupPoints;
-    }
+    // public void setPickupPoints(List<PickupPoint> pickupPoints) {
+    //     this.pickupPoints = pickupPoints;
+    // }
 }

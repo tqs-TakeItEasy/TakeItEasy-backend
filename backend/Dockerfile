@@ -1,5 +1,9 @@
-FROM openjdk:17
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
-EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+FROM maven:3.8.5-openjdk-17
+
+COPY . /spring
+
+WORKDIR /spring
+
+RUN mvn -N wrapper:wrapper
+
+CMD ["./mvnw", "spring-boot:run"]

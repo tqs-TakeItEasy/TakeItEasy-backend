@@ -1,6 +1,9 @@
 package tie.backend.model;
 
+import jakarta.persistence.GeneratedValue;
+
 public class Delivery {
+    @GeneratedValue
     private Long id;
     private String storeName;
     private String userName;
@@ -12,7 +15,19 @@ public class Delivery {
     private String deliveryDate;
     private String pickupDate;
 
-    private Delivery(){}
+    public Delivery(){}
+
+    public Delivery(String storeName, String userName, String userEmail, Long packageId, PickupPoint pickupPoint, DeliveryStatus status, String registeryDate) {
+        this.storeName = storeName;
+        this.userName = userName;
+        this.userEmail = userEmail;
+        this.packageId = packageId;
+        this.pickupPoint = pickupPoint;
+        this.status = status;
+        this.registeryDate = registeryDate;
+        this.deliveryDate = null;
+        this.pickupDate = null;
+    }
 
     public String getDeliveryDate() {
         return deliveryDate;

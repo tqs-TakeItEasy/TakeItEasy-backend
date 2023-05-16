@@ -1,8 +1,12 @@
 package tie.backend.model;
 
+import jakarta.persistence.GeneratedValue;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.ArrayList;
 
 public class PickupPoint {
+    @GeneratedValue
     private Long id;
     private String name;
     private Address address;
@@ -11,6 +15,14 @@ public class PickupPoint {
     private ArrayList<Delivery> onGoingDeliveries;
 
     public PickupPoint(){}
+
+    public PickupPoint(String name, Address address, PickupPointStatus status) {
+        this.name = name;
+        this.address = address;
+        this.status = status;
+        this.allDeliveries = new ArrayList<Delivery>();
+        this.onGoingDeliveries = new ArrayList<Delivery>();
+    }
 
     public Address getAddress() {
         return address;

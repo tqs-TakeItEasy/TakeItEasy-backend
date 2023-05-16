@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+import java.time.LocalDate;
+
 @Entity
 @Table(name = "delivery")
 public class Delivery {
@@ -56,14 +58,14 @@ public class Delivery {
 
     public Delivery(){}
 
-    public Delivery(String storeName, String userName, String userEmail, Long packageId, PickupPoint pickupPoint, DeliveryStatus status, String registeryDate) {
+    public Delivery(String storeName, String userName, String userEmail, Long packageId, PickupPoint pickupPoint) {
         this.storeName = storeName;
         this.userName = userName;
         this.userEmail = userEmail;
         this.packageId = packageId;
         this.pickupPoint = pickupPoint;
-        this.status = status;
-        this.registeryDate = registeryDate;
+        this.status = DeliveryStatus.DISPATCHED;
+        this.registeryDate = LocalDate.now().toString();
         this.deliveryDate = null;
         this.pickupDate = null;
     }

@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tie.backend.model.Delivery;
 import tie.backend.service.DeliveryService;
+import tie.backend.service.PickupPointService;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
+import java.util.ArrayList;
 
 @RestController
 @CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
@@ -18,19 +19,19 @@ public class Controller{
 
     // Get all deliveries
     @GetMapping("/allDeliveries")
-    public Object getAllDeliveries() {
+    public ArrayList<Delivery> getAllDeliveries() {
         return deliveryService.getAllDeliveries();
     }
 
     // Get all deliveries
     @GetMapping("/pickUpPointDeliveries")
-    public Object getAllDeliveries(@RequestParam String pickUpPointId) {
-        return deliveryService.getPickUpPointDelivires(pickUpPointId);
+    public ArrayList<Delivery> getAllDeliveries(@RequestParam String pickUpPointId) {
+        return deliveryService.getDeliveriesByPickupPointId(Long.valueOf(pickUpPointId));
     }
 
     // Get all deliveries
     @GetMapping("/Delivery")
     public Object getDelivery(@RequestParam String deliveryId) {
-        return deliveryService.getDeliveryid(deliveryId);
+        return deliveryService.getDeliveryById(Long.valueOf(deliveryId));
     }
 }

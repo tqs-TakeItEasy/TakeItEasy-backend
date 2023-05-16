@@ -47,6 +47,12 @@ public class PickupPoint {
 
     public PickupPoint(){}
 
+    public PickupPoint(String name, String address, PickupPointStatus status) {
+        this.name = name;
+        this.address = address;
+        this.status = status;
+    }
+
     public String getAddress() {
         return address;
     }

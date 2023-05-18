@@ -7,10 +7,11 @@ import tie.backend.model.Notification;
 import tie.backend.model.PickupPoint;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PickupPointRepository extends JpaRepository<PickupPoint,Long>{
-    List<PickupPoint> findByName(String string);
+    Optional<PickupPoint> findByName(String string);
 
-    List<PickupPoint> findByEmail(String email);
+    Optional<PickupPoint> findByEmail(String email);
 }

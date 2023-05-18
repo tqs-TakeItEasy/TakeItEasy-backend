@@ -31,6 +31,9 @@ public class PickupPoint {
     @Column(name = "address")
     private String address;
 
+    @Column(name = "email")
+    private String email;
+
     @Column(name = "status")
     private PickupPointStatus status;
 
@@ -42,9 +45,10 @@ public class PickupPoint {
     // CONSTRUCTORS
 
     public PickupPoint(){}
-    public PickupPoint(String name, String address) {
+    public PickupPoint(String name, String address, String email) {
         this.name = name;
         this.address = address;
+        this.email = email;
         this.status = PickupPointStatus.AVAILABLE;
     }
 
@@ -53,6 +57,10 @@ public class PickupPoint {
     public String getAddress() {
         return address;
     }
+    public String getEmail() {
+        return email;
+    }
+
     public Company getCompany() {
         return company;
     }
@@ -71,6 +79,8 @@ public class PickupPoint {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public void setEmail(String email) {this.email = email;}
     public void setCompany(Company company) {
         this.company = company;
     }
@@ -94,15 +104,16 @@ public class PickupPoint {
             return false;
         }
         PickupPoint pickupPoint = (PickupPoint) o;
-        return  Objects.equals(name, pickupPoint.name) && 
-                Objects.equals(address, pickupPoint.address) && 
+        return  Objects.equals(name, pickupPoint.name) &&
+                Objects.equals(address, pickupPoint.address) &&
+                Objects.equals(email, pickupPoint.email) &&
                 Objects.equals(status, pickupPoint.status) && 
                 Objects.equals(company, pickupPoint.company);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, address, status, company);
+        return Objects.hash(name, address, email,status, company);
     }
 
     // STRING REPRESENTATION
@@ -113,6 +124,7 @@ public class PickupPoint {
                 "id='" + getId() + "', " +
                 "name='" + getName() + "', " +
                 "address='" + getAddress() + "', " +
+                "email='" + getEmail() + "', " +
                 "status='" + getStatus() + "', " +
                 "company='" + getCompany() + "'" +
                 "}";

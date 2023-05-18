@@ -1,5 +1,7 @@
 package tie.backend.model;
 
+import java.util.Objects;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +19,8 @@ import jakarta.persistence.Table;
 @Table(name = "pickup_point")
 public class PickupPoint {
 
+    // TABLE
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,29 +34,25 @@ public class PickupPoint {
     @Column(name = "status")
     private PickupPointStatus status;
 
-    // @ManyToOne
-    // @JoinColumn(name = "company_id")
-    // private Company company;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
 
-    // @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // private List<Delivery> allDeliveries;
-
-    // @OneToMany(mappedBy = "delivery", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // private List<Delivery> onGoingDeliveries;
+    // CONSTRUCTORS
 
     public PickupPoint(){}
+    public PickupPoint(String name, String address) {
+        this.name = name;
+        this.address = address;
+        this.status = PickupPointStatus.AVAILABLE;
+    }
+
+    // GETTERS
 
     public String getAddress() {
         return address;
     }
-    // public List<Delivery> getAllDeliveries() {
-    //     return allDeliveries;
-    // }
     public Company getCompany() {
         return company;
     }
@@ -62,31 +62,59 @@ public class PickupPoint {
     public String getName() {
         return name;
     }
-    // public List<Delivery> getOnGoingDeliveries() {
-    //     return onGoingDeliveries;
-    // }
     public PickupPointStatus getStatus() {
         return status;
     }
+
+    // SETTERS
+
     public void setAddress(String address) {
         this.address = address;
     }
     public void setCompany(Company company) {
         this.company = company;
     }
-    // public void setAllDeliveries(List<Delivery> allDeliveries) {
-    //     this.allDeliveries = allDeliveries;
-    // }
     public void setId(Long id) {
         this.id = id;
     }
     public void setName(String name) {
         this.name = name;
     }
-    // public void setOnGoingDeliveries(List<Delivery> onGoingDeliveries) {
-    //     this.onGoingDeliveries = onGoingDeliveries;
-    // }
     public void setStatus(PickupPointStatus status) {
         this.status = status;
+    }
+
+    // EQUALS AND HASH
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof PickupPoint)) {
+            return false;
+        }
+        PickupPoint pickupPoint = (PickupPoint) o;
+        return  Objects.equals(name, pickupPoint.name) && 
+                Objects.equals(address, pickupPoint.address) && 
+                Objects.equals(status, pickupPoint.status) && 
+                Objects.equals(company, pickupPoint.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, address, status, company);
+    }
+
+    // STRING REPRESENTATION
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + getId() + "', " +
+                "name='" + getName() + "', " +
+                "address='" + getAddress() + "', " +
+                "status='" + getStatus() + "', " +
+                "company='" + getCompany() + "'" +
+                "}";
     }
 }

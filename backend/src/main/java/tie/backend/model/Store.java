@@ -1,6 +1,5 @@
 package tie.backend.model;
 
-
 import java.util.Objects;
 
 import org.hibernate.annotations.OnDelete;
@@ -18,10 +17,10 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table
-public class Admin {
+public class Store {
 
     // TABLE
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,26 +31,25 @@ public class Admin {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "pwd")
-    private String pwd;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
 
-    // CONSTRUCTORS
+    // CONSTRUCTOR
 
-    public Admin(){}
-    public Admin(String name, String email, String pwd, Company company){
+    public Store(){}
+    public Store(String name, String email, Company company){
         this.name = name;
         this.email = email;
-        this.pwd = pwd;
         this.company = company;
     }
 
     // GETTERS
 
+    public Company getCompany() {
+        return company;
+    }
     public String getEmail() {
         return email;
     }
@@ -61,29 +59,20 @@ public class Admin {
     public String getName() {
         return name;
     }
-    public Company getCompany() {
-        return company;
-    }
-    public String getPwd() {
-        return pwd;
-    }
 
     // SETTERS
 
+    public void setCompany(Company company) {
+        this.company = company;
+    }
     public void setEmail(String email) {
         this.email = email;
     }
     public void setId(Long id) {
         this.id = id;
     }
-    public void setCompany(Company company) {
-        this.company = company;
-    }
     public void setName(String name) {
         this.name = name;
-    }
-    public void setPwd(String pwd) {
-        this.pwd = pwd;
     }
 
     // EQUALS AND HASH
@@ -92,19 +81,18 @@ public class Admin {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof PickupPoint)) {
+        if (!(o instanceof Company)) {
             return false;
         }
-        Admin admin = (Admin) o;
-        return  Objects.equals(name, admin.name) && 
-                Objects.equals(email, admin.email) && 
-                Objects.equals(pwd, admin.pwd) && 
-                Objects.equals(company, admin.company);
+        Store store = (Store) o;
+        return  Objects.equals(name, store.name) && 
+                Objects.equals(email, store.email) && 
+                Objects.equals(company, store.company);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, pwd, company);
+        return Objects.hash(name, email, company);
     }
 
     // STRING REPRESENTATION
@@ -115,7 +103,6 @@ public class Admin {
                 "id='" + getId() + "', " +
                 "name='" + getName() + "', " +
                 "email='" + getEmail() + "', " +
-                "pwd='" + getPwd() + "', " +
                 "company='" + getCompany() + "'" +
                 "}";
     }

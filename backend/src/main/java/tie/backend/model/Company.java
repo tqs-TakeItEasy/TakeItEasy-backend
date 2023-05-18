@@ -1,5 +1,7 @@
 package tie.backend.model;
 
+import java.util.Objects;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,8 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "company")
 public class Company {
+
+    // TABLE
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,30 +25,65 @@ public class Company {
     @Column(name = "email", unique = true)
     private String email;
 
-    // @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // private List<PickupPoint> pickupPoints;
-
-    // @OneToMany(mappedBy = "company", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    // private List<Notification> notifications;
+    // CONSTRUCTORS
 
     public Company(){}
+    public Company(String name, String email){
+        this.name = name;
+        this.email = email;
+    }
+
+    // GETTERS
 
     public String getEmail() {
         return email;
     }
+    public Long getId() {
+        return id;
+    }
     public String getName() {
         return name;
     }
-    // public List<PickupPoint> getPickupPoints() {
-    //     return pickupPoints;
-    // }
+
+    // SETTERS
+
     public void setEmail(String email) {
         this.email = email;
     }
     public void setName(String name) {
         this.name = name;
     }
-    // public void setPickupPoints(List<PickupPoint> pickupPoints) {
-    //     this.pickupPoints = pickupPoints;
-    // }
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    // EQUALS AND HASH
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Company)) {
+            return false;
+        }
+        Company company = (Company) o;
+        return  Objects.equals(name, company.name) && 
+                Objects.equals(email, company.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email);
+    }
+
+    // STRING REPRESENTATION
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + getId() + "', " +
+                "name='" + getName() + "', " +
+                "email='" + getName() + "', " +
+                "}";
+    }
 }

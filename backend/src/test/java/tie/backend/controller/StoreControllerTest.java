@@ -5,6 +5,7 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -104,6 +105,23 @@ class StoreControllerTest {
         when(storeService.getStoreById(store1.getId())).thenReturn(store1);
 
         mvc.perform(get("/api/v1/stores/store/" + Long.toString(id)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
+                .andExpect(jsonPath("$.name", is(store1.getName())))
+                .andExpect(jsonPath("$.email", is(store1.getEmail())))
+        ;
+    }
+
+    @Test
+    void whenCreateStore_thenReturnStore() throws Exception{
+
+        Long id = 1L;
+        store1.setId(id);
+        
+        when(storeService.createStore(store1)).thenReturn(store1);
+
+        mvc.perform(post("/api/v1/stores/new", store1).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.id", is(store1.getId().intValue())))

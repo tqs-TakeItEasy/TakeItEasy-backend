@@ -82,7 +82,7 @@ class PickupPointServiceTest {
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.empty());
 
         //  create new PickupPoint and assert its created as suposed
-        PickupPoint NewPickupPoint = pickupPointService.addPickupPoint(dummyPickupPoint1.getName(), dummyPickupPoint1.getAddress(), dummyPickupPoint1.getEmail());
+        PickupPoint NewPickupPoint = pickupPointService.addPickupPoint(dummyPickupPoint1);
         assertEquals( dummyPickupPoint1,  NewPickupPoint);
 
         // verify if the service methods where called as suposed
@@ -99,7 +99,7 @@ class PickupPointServiceTest {
 
         //  see if the expected exception and message are correct
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
-            pickupPointService.addPickupPoint(dummyPickupPoint1.getName(), dummyPickupPoint1.getAddress(), dummyPickupPoint1.getEmail());
+            pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
         Assertions.assertEquals("This Pickup Name already exists", exception.getReason());
 
@@ -117,7 +117,7 @@ class PickupPointServiceTest {
 
         //  see if the expected exception and message are correct
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
-            pickupPointService.addPickupPoint(dummyPickupPoint1.getName(), dummyPickupPoint1.getAddress(), dummyPickupPoint1.getEmail());
+            pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
         Assertions.assertEquals("This Pickup Email already exists", exception.getReason());
 

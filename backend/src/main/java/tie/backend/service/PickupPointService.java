@@ -17,22 +17,18 @@ public class PickupPointService {
     @Autowired
     private PickupPointRepository pickupPointRepository;
 
-    public PickupPoint addPickupPoint(String name, String address, String email) {
-        Optional<PickupPoint> newClientByName = pickupPointRepository.findByName(name);
-        Optional<PickupPoint> newClientByEmail = pickupPointRepository.findByEmail(email);
+    public PickupPoint addPickupPoint(PickupPoint newPickupPoint) {
+        Optional<PickupPoint> newPickupPointByName = pickupPointRepository.findByName(newPickupPoint.getName());
+        Optional<PickupPoint> newPickupPointByEmail = pickupPointRepository.findByEmail(newPickupPoint.getEmail());
 
-        System.out.println(newClientByName);
-        System.out.println(newClientByEmail);
+        System.out.println(newPickupPointByName);
+        System.out.println(newPickupPointByEmail);
 
-        if (newClientByName.isPresent()){
-            System.out.println("Aqui");
+        if (newPickupPointByName.isPresent()){
             throw new ResponseStatusException(HttpStatus.OK, "This Pickup Name already exists");
-        } else if (newClientByEmail.isPresent()) {
-            System.out.println("Aqui2");
+        } else if (newPickupPointByEmail.isPresent()) {
             throw new ResponseStatusException(HttpStatus.OK, "This Pickup Email already exists");
         } else {
-            System.out.println("Aqui3");
-            PickupPoint newPickupPoint = new PickupPoint(name, address, email);
             pickupPointRepository.save(newPickupPoint);
             return newPickupPoint;
         }
@@ -50,5 +46,16 @@ public class PickupPointService {
         } else {
             return null;
         }
+    }
+
+    public Long getNextId() {
+        long max_id = 0;
+        for (PickupPoint pickupPoint : getAllPickupPoints()) {
+            long id = pickupPoint.getId();
+            if (id > max_id) {
+                max_id = id;
+            }
+        }
+        return max_id+1;
     }
 }

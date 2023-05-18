@@ -17,7 +17,7 @@ import tie.backend.service.PickupPointService;
 
 @RestController
 @CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
-@RequestMapping("/api/v1/")
+@RequestMapping("/api/v1/deliveries/")
 public class DeliveryController{
 
     @Autowired
@@ -27,14 +27,14 @@ public class DeliveryController{
     PickupPointService pickupPointService;
 
     // GET - All Deliveries
-    @GetMapping("deliveries")
+    @GetMapping("")
     public ResponseEntity<List<Delivery>> getAllDeliveries() {
         List<Delivery> deliveries = deliveryService.getAllDeliveries();
         return ResponseEntity.ok().body(deliveries);
     }
 
     // GET - Deliveriy by Identifier
-    @GetMapping("/delivery/{deliveryId}")
+    @GetMapping("delivery/{deliveryId}")
     public ResponseEntity<Delivery> getDeliveryById(@PathVariable(value="deliveryId") String deliveryId) {
         Delivery delivery = deliveryService.getDeliveryById(Long.valueOf(deliveryId));
         if (delivery == null){
@@ -44,8 +44,8 @@ public class DeliveryController{
     }
 
     // GET - Deliveries By Pickup Point Identifier
-    @GetMapping("deliveries/point/{pickupPointId}")
-    public ResponseEntity<List<Delivery>> gegetDeliveriesByPickupPointId(@PathVariable(value="pickupPointId") String pickupPointId) {
+    @GetMapping("point/{pickupPointId}")
+    public ResponseEntity<List<Delivery>> getDeliveriesByPickupPointId(@PathVariable(value="pickupPointId") String pickupPointId) {
         if (!pickupPointId.matches("\\d+")){
             return ResponseEntity.badRequest().build();
         }

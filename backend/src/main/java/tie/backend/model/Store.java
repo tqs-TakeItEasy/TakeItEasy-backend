@@ -38,8 +38,8 @@ public class Store {
 
     // CONSTRUCTOR
 
-    Store(){}
-    Store(String name, String email, Company company){
+    public Store(){}
+    public Store(String name, String email, Company company){
         this.name = name;
         this.email = email;
         this.company = company;

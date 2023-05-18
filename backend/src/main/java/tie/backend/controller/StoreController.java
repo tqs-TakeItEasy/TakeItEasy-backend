@@ -1,4 +1,4 @@
-package tie.backend.Controller;
+package tie.backend.controller;
 
 import java.util.List;
 
@@ -44,6 +44,10 @@ public class StoreController {
 
     @PostMapping("new")
     public ResponseEntity<Store> createStore(@Valid @RequestBody Store store){
-        return null;
+        Store returnedStore = storeService.createStore(store);
+        if (returnedStore == null){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok().body(returnedStore);
     }
 }

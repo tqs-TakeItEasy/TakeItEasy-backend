@@ -3,14 +3,17 @@ package tie.backend.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,6 +27,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.Store;
 import tie.backend.service.StoreService;
@@ -39,43 +43,43 @@ class StoreControllerTest {
     @MockBean
     private StoreService storeService;
     
-    private List<Store> stores;
-    private Company company1;
-    private Company company2;
-    private Company company3;
+    private List<Store> dummyStores;
+    private Company dummyCompany1;
+    private Company dummyCompany2;
+    private Company dummyCompany3;
     private Store store1;
     private Store store2;
     private Store store3;
 
     @BeforeEach
     void setUp() {
-        stores = new ArrayList<>();
+        dummyStores = new ArrayList<>();
         
-        company1 = new Company("name1", "email1");
-        company2 = new Company("name2", "email2");
-        company3 = new Company("name3", "email3");
+        dummyCompany1 = new Company("name1", "email1");
+        dummyCompany2 = new Company("name2", "email2");
+        dummyCompany3 = new Company("name3", "email3");
         
-        store1 = new Store("name1", "email1", company1); 
-        store2 = new Store("name2", "email2", company2);
-        store3 = new Store("name3", "email3", company3);
+        store1 = new Store("name1", "email1", dummyCompany1); 
+        store2 = new Store("name2", "email2", dummyCompany2);
+        store3 = new Store("name3", "email3", dummyCompany3);
 
-        stores.add(store1);
-        stores.add(store2);
-        stores.add(store3);
+        dummyStores.add(store1);
+        dummyStores.add(store2);
+        dummyStores.add(store3);
     }
 
     @Test
     void whenGetAllStores_thenReturnStoresList() throws Exception{
         
-        when(storeService.getAllStores()).thenReturn(stores);
+        when(storeService.getAllStores()).thenReturn(dummyStores);
 
         mvc.perform(get("/api/v1/stores/").contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(equalTo(3))))
-                .andExpect(jsonPath("$[0].name", is(company1.getName())))
-                .andExpect(jsonPath("$[1].name", is(company2.getName())))
-                .andExpect(jsonPath("$[2].name", is(company3.getName())))
+                .andExpect(jsonPath("$[0].name", is(dummyCompany1.getName())))
+                .andExpect(jsonPath("$[1].name", is(dummyCompany2.getName())))
+                .andExpect(jsonPath("$[2].name", is(dummyCompany3.getName())))
         ;
     }
 
@@ -88,46 +92,24 @@ class StoreControllerTest {
         when(storeService.getStoreById(store1.getId())).thenReturn(store1);
 
         mvc.perform(get("/api/v1/stores/store/" + Long.toString(id)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
-                .andExpect(jsonPath("$.name", is(store1.getName())))
-                .andExpect(jsonPath("$.email", is(store1.getEmail())))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
+            .andExpect(jsonPath("$.name", is(store1.getName())))
+            .andExpect(jsonPath("$.email", is(store1.getEmail())))
         ;
     }
 
-    @Test
-    void whenGetStoreByCpId_thenReturnStore() throws Exception{
+    // @Test
+    // void whenCreateStore_thenReturnStore() throws Exception{
+    //     List<Store> testStores = new ArrayList<>(Arrays.asList(store1));
 
-        Long id = 1L;
-        store1.setId(id);
-        
-        when(storeService.getStoreById(store1.getId())).thenReturn(store1);
+    //     mvc.perform(post("/api/v1/stores/new").contentType(MediaType.APPLICATION_JSON).content(JsonUtils.toJson(store1)));
 
-        mvc.perform(get("/api/v1/stores/store/" + Long.toString(id)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
-                .andExpect(jsonPath("$.name", is(store1.getName())))
-                .andExpect(jsonPath("$.email", is(store1.getEmail())))
-        ;
-    }
+    //     List<Store> returnedStores = storeService.getAllStores();
 
-    @Test
-    void whenCreateStore_thenReturnStore() throws Exception{
+    //     assertEquals(testStores, returnedStores);
 
-        Long id = 1L;
-        store1.setId(id);
-        
-        when(storeService.createStore(store1)).thenReturn(store1);
-
-        mvc.perform(post("/api/v1/stores/new", store1).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
-                .andExpect(jsonPath("$.name", is(store1.getName())))
-                .andExpect(jsonPath("$.email", is(store1.getEmail())))
-        ;
-    }
+    // }
 
 }

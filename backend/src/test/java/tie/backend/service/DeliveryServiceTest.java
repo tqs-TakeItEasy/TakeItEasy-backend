@@ -20,6 +20,7 @@ import org.mockito.MockitoAnnotations;
 
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
+import tie.backend.model.Store;
 import tie.backend.repository.DeliveryRepository;
 
 class DeliveryServiceTest {
@@ -34,13 +35,16 @@ class DeliveryServiceTest {
     private Delivery dummyDelivery1;
     private Delivery dummyDelivery2;
     private PickupPoint dummyPickupPoint;
-
+    private Store dummyStore;
+    
     @BeforeEach
     void setUp() {
         dummyDeliveries = new ArrayList<Delivery>();
         dummyPickupPoint = new PickupPoint();
-        dummyDelivery1 = new Delivery("loja1", "user1", "email1", 22L, dummyPickupPoint);
-        dummyDelivery2 = new Delivery("loja2", "user2", "email2", 24L, dummyPickupPoint);
+        dummyStore = new Store();
+
+        dummyDelivery1 = new Delivery("user1", "email1", 22L, dummyPickupPoint, dummyStore);
+        dummyDelivery2 = new Delivery("user2", "email2", 24L, dummyPickupPoint, dummyStore);
         
         dummyDeliveries.add(dummyDelivery1);
         dummyDeliveries.add(dummyDelivery2);
@@ -81,27 +85,6 @@ class DeliveryServiceTest {
     }
 
     @Test
-    void whenGetPickupPointDeliveries_thenReturnAllPickupPointDeliveries() {
-        when(deliveryRepository.findByPickupPoint(dummyPickupPoint)).thenReturn(dummyDeliveries);
-
-        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByPickupPoint(dummyPickupPoint);
-
-        assertEquals(dummyDeliveries, returnedDeliveries);
-        verify(deliveryRepository, times(1)).findByPickupPoint(dummyPickupPoint);
-    }
-
-    @Test
-    void whenGetInvalidPickupPointDeliveries_thenReturnEmptyList() {
-        PickupPoint invalidPickupPoint = new PickupPoint();
-        when(deliveryRepository.findByPickupPoint(invalidPickupPoint)).thenReturn(new ArrayList<>());
-
-        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByPickupPoint(invalidPickupPoint);
-
-        assertThat(returnedDeliveries.isEmpty());
-        verify(deliveryRepository, times(1)).findByPickupPoint(invalidPickupPoint);
-    }
-
-    @Test
     void whenGetDeliveryByPackageId_thenReturnPackageDeliveries() {
         List<Delivery> listedDummyDelivery1 = new ArrayList<Delivery>(Arrays.asList(dummyDelivery1));
         when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(listedDummyDelivery1);
@@ -123,5 +106,46 @@ class DeliveryServiceTest {
         assertThat(returnedDeliveries.isEmpty());
         verify(deliveryRepository, times(1)).findByPackageId(invalidId);
     }
+    
+    @Test
+    void whenGetDeliveriesByPickupPoint_thenReturnDeliveries() {
+        when(deliveryRepository.findByPickupPoint(dummyPickupPoint)).thenReturn(dummyDeliveries);
 
+        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByPickupPoint(dummyPickupPoint);
+
+        assertEquals(dummyDeliveries, returnedDeliveries);
+        verify(deliveryRepository, times(1)).findByPickupPoint(dummyPickupPoint);
+    }
+
+    @Test
+    void whenGetDeliveriesByInvalidPickupPoint_thenReturnEmptyList() {
+        PickupPoint invalidPickupPoint = new PickupPoint();
+        when(deliveryRepository.findByPickupPoint(invalidPickupPoint)).thenReturn(new ArrayList<>());
+
+        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByPickupPoint(invalidPickupPoint);
+
+        assertThat(returnedDeliveries.isEmpty());
+        verify(deliveryRepository, times(1)).findByPickupPoint(invalidPickupPoint);
+    }
+
+    @Test
+    void whenGetDeliveriesByStore_thenReturDeliveries() {
+        when(deliveryRepository.findByStore(dummyStore)).thenReturn(dummyDeliveries);
+
+        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByStore(dummyStore);
+
+        assertEquals(dummyDeliveries, returnedDeliveries);
+        verify(deliveryRepository, times(1)).findByStore(dummyStore);
+    }
+
+    @Test
+    void whenGetDeliveriesByInvalidStore_thenReturnEmptyList() {
+        Store invalidStore = new Store();
+        when(deliveryRepository.findByStore(invalidStore)).thenReturn(new ArrayList<>());
+
+        List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByStore(invalidStore);
+
+        assertThat(returnedDeliveries.isEmpty());
+        verify(deliveryRepository, times(1)).findByStore(invalidStore);
+    }
 }

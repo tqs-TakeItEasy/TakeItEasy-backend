@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
+import tie.backend.model.Store;
 
 @DataJpaTest
 public class DeliveryRepositoryTest {
@@ -30,18 +31,21 @@ public class DeliveryRepositoryTest {
     private Delivery dummyDelivery1;
     private Delivery dummyDelivery2;
     private PickupPoint dummyPickupPoint;
+    private Store dummyStore;
 
     @BeforeEach
     void setUp(){
         dummyDeliveries = new ArrayList<>();
         dummyPickupPoint = new PickupPoint();
-        dummyDelivery1 = new Delivery("storeName1", "userName1", "userEmail1", 20L, dummyPickupPoint);
-        dummyDelivery2 = new Delivery("storeName2", "userName2", "userEmail2", 20L, dummyPickupPoint);
+        dummyStore = new Store();
+        dummyDelivery1 = new Delivery("userName1", "userEmail1", 20L, dummyPickupPoint, dummyStore);
+        dummyDelivery2 = new Delivery("userName2", "userEmail2", 20L, dummyPickupPoint, dummyStore);
 
         dummyDeliveries.add(dummyDelivery1);
         dummyDeliveries.add(dummyDelivery2);
 
         testEntityManager.persistAndFlush(dummyPickupPoint);
+        testEntityManager.persistAndFlush(dummyStore);
     }
 
     @Test
@@ -102,6 +106,24 @@ public class DeliveryRepositoryTest {
         PickupPoint pickupPoint = new PickupPoint();
         testEntityManager.persistAndFlush(pickupPoint);
         List<Delivery> returnedDeliveries = deliveryRepository.findByPickupPoint(pickupPoint);
+
+        assertThat(returnedDeliveries.isEmpty());
+    }
+
+    @Test
+    void whenGetDeliveryByStore_thenReturnDelivery(){
+        testEntityManager.persistAndFlush(dummyDelivery1);
+        List<Delivery> dummyDelivery1List = new ArrayList<>(Arrays.asList(dummyDelivery1));
+        List<Delivery> returnedDeliveries = deliveryRepository.findByStore(dummyDelivery1.getStore());
+        
+        assertEquals(dummyDelivery1List, returnedDeliveries);
+    }
+
+    @Test
+    void whenGetDeliveryByInvalidStore_thenReturnEmptyList(){
+        Store store = new Store();
+        testEntityManager.persistAndFlush(store);
+        List<Delivery> returnedDeliveries = deliveryRepository.findByStore(store);
 
         assertThat(returnedDeliveries.isEmpty());
     }

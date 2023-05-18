@@ -15,6 +15,10 @@ public class PickupPointService {
     @Autowired
     private PickupPointRepository pickupPointRepository;
 
+    public static PickupPoint addPickupPoint(PickupPoint dummyPickupPoint1) {
+        return null;
+    }
+
     public List<PickupPoint> getAllPickupPoints() {
         return pickupPointRepository.findAll();
     }

@@ -1,21 +1,24 @@
 package tie.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import org.springframework.web.server.ResponseStatusException;
+import tie.backend.model.Notification;
 import tie.backend.model.PickupPoint;
 import tie.backend.repository.PickupPointRepository;
 
@@ -34,8 +37,8 @@ class PickupPointServiceTest {
     @BeforeEach
     void setUp() {
         dummyPickupPoints = new ArrayList<PickupPoint>();
-        dummyPickupPoint1 = new PickupPoint("name1", "address1");
-        dummyPickupPoint2 = new PickupPoint("name2", "address2");
+        dummyPickupPoint1 = new PickupPoint("name1", "address1", "email1");
+        dummyPickupPoint2 = new PickupPoint("name2", "address2", "email2");
         
         dummyPickupPoints.add(dummyPickupPoint1);
         dummyPickupPoints.add(dummyPickupPoint2);
@@ -75,4 +78,51 @@ class PickupPointServiceTest {
         verify(pickupPointRepository, times(1)).findById(id);
     }
 
+
+    @Test
+    void WhenAddValidPickupPoint_ThenReturnCreatedClient(){
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(null);
+        when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(null);
+
+        PickupPoint NewPickupPoint = PickupPointService.addPickupPoint(dummyPickupPoint1);
+        assertEquals( dummyPickupPoint1,  NewPickupPoint);
+
+        verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
+        verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
+    }
+
+    @Test
+    void WhenAddInvalidPickupPointName_ThenReturnInvalidName(){
+        List<PickupPoint> listedDummyPickupPoint1 = new ArrayList<PickupPoint>(Arrays.asList(dummyPickupPoint1));
+
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(listedDummyPickupPoint1);
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getEmail())).thenReturn(null);
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            PickupPointService.addPickupPoint(dummyPickupPoint1);
+        });
+
+        Assertions.assertEquals("This Pickup Name already exists", exception.getMessage());
+
+        verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
+        verify(pickupPointRepository, times(0)).findByEmail(dummyPickupPoint1.getEmail());
+    }
+
+    @Test
+    void WhenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
+        List<PickupPoint> listedDummyPickupPoint1 = new ArrayList<PickupPoint>(Arrays.asList(dummyPickupPoint1));
+
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getEmail())).thenReturn(null);
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getEmail())).thenReturn(listedDummyPickupPoint1);
+
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            PickupPointService.addPickupPoint(dummyPickupPoint1);
+        });
+
+        Assertions.assertEquals("This Pickup Email already exists", exception.getMessage());
+
+        verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
+        verify(pickupPointRepository, times(0)).findByEmail(dummyPickupPoint1.getEmail());
+    }
 }

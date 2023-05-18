@@ -30,8 +30,8 @@ class PickupPointRepositoryTest {
     @BeforeEach
     void setUp(){
         dummyPickupPoints = new ArrayList<>();
-        dummyPickupPoint1 = new PickupPoint("name1", "address1");
-        dummyPickupPoint2 = new PickupPoint("name2", "address2");
+        dummyPickupPoint1 = new PickupPoint("name1", "address1", "email1");
+        dummyPickupPoint2 = new PickupPoint("name2", "address2", "email2");
 
         dummyPickupPoints.add(dummyPickupPoint1);
         dummyPickupPoints.add(dummyPickupPoint2);

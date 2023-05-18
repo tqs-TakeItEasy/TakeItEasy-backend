@@ -1,15 +1,14 @@
 package tie.backend.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.events.Event;
+
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.repository.DeliveryRepository;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class DeliveryService {
@@ -17,12 +16,12 @@ public class DeliveryService {
     @Autowired
     private DeliveryRepository repository;
 
-    public ArrayList<Delivery> getAllDeliveries() {
-        return (ArrayList<Delivery>) repository.findAll();
+    public List<Delivery> getAllDeliveries() {
+        return repository.findAll();
     }
 
-    public ArrayList<Delivery> getDeliveriesByPickupPointId(Long pickupPointId) {
-        return repository.findByPickupPointId(pickupPointId);
+    public List<Delivery> getDeliveriesByPickupPoint(PickupPoint pickupPoint) {
+        return repository.findByPickupPoint(pickupPoint);
     }
 
     public Delivery getDeliveryById(Long deliveryId) {
@@ -33,6 +32,10 @@ public class DeliveryService {
         } else {
             return null;
         }
+    }
+
+    public List<Delivery> getDeliveryByPackageId(Long id) {
+        return repository.findByPackageId(id);
     }
 
 

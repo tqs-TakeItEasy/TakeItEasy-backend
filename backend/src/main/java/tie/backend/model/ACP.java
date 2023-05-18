@@ -1,5 +1,7 @@
 package tie.backend.model;
 
+import java.util.Objects;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -17,6 +19,8 @@ import jakarta.persistence.Table;
 @Table(name = "acp")
 public class ACP {
 
+    // TABLE
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,23 +34,28 @@ public class ACP {
     @Column(name = "pwd")
     private String pwd;
 
-    // @ManyToOne
-    // @JoinColumn(name = "company_id")
-    // private Company company;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
 
-    // private List<String> roles;
-    
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickup_point_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PickupPoint pickupPoint;
 
+    // CONSTRUCTORS
+
     public ACP(){}
+    public ACP(String name, String email, String pwd, Company company, PickupPoint pickupPoint){
+        this.name = name;
+        this.email = email;
+        this.pwd = pwd;
+        this.company = company;
+        this.pickupPoint = pickupPoint;
+    }
+
+    // GETTERS
 
     public String getEmail() {
         return email;
@@ -63,9 +72,13 @@ public class ACP {
     public String getPwd() {
         return pwd;
     }
-    // public List<String> getRoles() {
-    //     return roles;
-    // }
+    public Company getCompany() {
+        return company;
+    }
+
+    // SETTERS
+
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -81,7 +94,43 @@ public class ACP {
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
-    // public void setRoles(List<String> roles) {
-    //     this.roles = roles;
-    // }
+    public void setCompany(Company company) {
+        this.company = company;
+    }
+
+    // EQUALS AND HASH
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof PickupPoint)) {
+            return false;
+        }
+        ACP aCP = (ACP) o;
+        return  Objects.equals(name, aCP.name) && 
+                Objects.equals(email, aCP.email) && 
+                Objects.equals(pwd, aCP.pwd) && 
+                Objects.equals(company, aCP.company) && 
+                Objects.equals(pickupPoint, aCP.pickupPoint);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, pwd, company, pickupPoint);
+    }
+
+    // STRING REPRESENTATION
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + getId() + "', " +
+                "name='" + getName() + "', " +
+                "email='" + getEmail() + "', " +
+                "pwd='" + getPwd() + "', " +
+                "company='" + getCompany() + "'" +
+                "pickupPoint='" + getPickupPoint() + "'" +
+                "}";
+    }
 }

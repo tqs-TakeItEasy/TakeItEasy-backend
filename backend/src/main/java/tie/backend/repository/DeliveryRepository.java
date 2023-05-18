@@ -4,11 +4,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import tie.backend.model.Delivery;
+import tie.backend.model.PickupPoint;
 
-import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery,Long>{
-
-    ArrayList<Delivery> findByPickupPointId(Long pickupPointId);
+    List<Delivery> findByPickupPoint(PickupPoint pickupPoint);
+    List<Delivery> findByPackageId(Long id);
 }

@@ -14,10 +14,13 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "delivery")
 public class Delivery {
+
+    // TABLE
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +37,6 @@ public class Delivery {
 
     @Column(name = "package_id")
     private Long packageId;
-
-    // @ManyToOne
-    // @JoinColumn(name = "company_id")
-    // private PickupPoint pickupPoint;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pickup_point_id")
@@ -56,8 +55,9 @@ public class Delivery {
     @Column(name = "pickup_date")
     private String pickupDate;
 
-    public Delivery(){}
+    // CONSTRUCTORS
 
+    public Delivery(){}
     public Delivery(String storeName, String userName, String userEmail, Long packageId, PickupPoint pickupPoint) {
         this.storeName = storeName;
         this.userName = userName;
@@ -69,6 +69,8 @@ public class Delivery {
         this.deliveryDate = null;
         this.pickupDate = null;
     }
+
+    // GETTERS
 
     public String getDeliveryDate() {
         return deliveryDate;
@@ -100,6 +102,9 @@ public class Delivery {
     public String getUserName() {
         return userName;
     }
+
+    // SETTERS
+
     public void setDeliveryDate(String deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
@@ -129,5 +134,49 @@ public class Delivery {
     }
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    // EQUALS AND HASH
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Delivery)) {
+            return false;
+        }
+        Delivery delivery = (Delivery) o;
+        return  Objects.equals(storeName, delivery.storeName) && 
+                Objects.equals(userEmail, delivery.userEmail) && 
+                Objects.equals(userName, delivery.userName) && 
+                Objects.equals(packageId, delivery.packageId) && 
+                Objects.equals(pickupPoint, delivery.pickupPoint) && 
+                Objects.equals(status, delivery.status) && 
+                Objects.equals(registeryDate, delivery.registeryDate) && 
+                Objects.equals(deliveryDate, delivery.deliveryDate) && 
+                Objects.equals(pickupDate, delivery.pickupDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(storeName, userEmail, userName, packageId, pickupPoint, status, registeryDate, deliveryDate, pickupDate);
+    }
+
+    // STRING REPRESENTATION
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + getId() + "', " +
+                "storeName='" + getStoreName() + "', " +
+                "userEmail='" + getUserEmail() + "', " +
+                "userName='" + getUserName() + "', " +
+                "packageId='" + getPackageId() + "', " +
+                "pickupPoint='" + getPickupPoint() + "', " +
+                "status='" + getStatus() + "', " +
+                "registeryDate='" + getRegisteryDate() + "', " +
+                "deliveryDate='" + getDeliveryDate() + "'" +
+                "pickupDate='" + getPickupDate() + "'" +
+                "}";
     }
 }

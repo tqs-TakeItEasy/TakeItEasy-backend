@@ -1,6 +1,8 @@
 package tie.backend.model;
 
 
+import java.util.Objects;
+
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -18,6 +20,8 @@ import jakarta.persistence.Table;
 @Table
 public class Admin {
 
+    // TABLE
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -31,18 +35,22 @@ public class Admin {
     @Column(name = "pwd")
     private String pwd;
 
-    // @ManyToOne
-    // @JoinColumn(name = "company_id")
-    // private Company company;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
 
-    // private List<String> roles;
+    // CONSTRUCTORS
 
     public Admin(){}
+    public Admin(String name, String email, String pwd, Company company){
+        this.name = name;
+        this.email = email;
+        this.pwd = pwd;
+        this.company = company;
+    }
+
+    // GETTERS
 
     public String getEmail() {
         return email;
@@ -59,9 +67,9 @@ public class Admin {
     public String getPwd() {
         return pwd;
     }
-    // public List<String> getRoles() {
-    //     return roles;
-    // }
+
+    // SETTERS
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -77,7 +85,38 @@ public class Admin {
     public void setPwd(String pwd) {
         this.pwd = pwd;
     }
-    // public void setRoles(List<String> roles) {
-    //     this.roles = roles;
-    // }
+
+    // EQUALS AND HASH
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof PickupPoint)) {
+            return false;
+        }
+        Admin admin = (Admin) o;
+        return  Objects.equals(name, admin.name) && 
+                Objects.equals(email, admin.email) && 
+                Objects.equals(pwd, admin.pwd) && 
+                Objects.equals(company, admin.company);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, email, pwd, company);
+    }
+
+    // STRING REPRESENTATION
+
+    @Override
+    public String toString() {
+        return  "{" +
+                "id='" + getId() + "', " +
+                "name='" + getName() + "', " +
+                "email='" + getEmail() + "', " +
+                "pwd='" + getPwd() + "', " +
+                "company='" + getCompany() + "'" +
+                "}";
+    }
 }

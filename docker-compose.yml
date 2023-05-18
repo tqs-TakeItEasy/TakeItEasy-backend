@@ -1,55 +1,36 @@
 version: "3.9"
 
+# volumes:
+#   tie_data:
+
 services:
+  # mysql_tie:
+  #   image: mysql/mysql-server:8.0
+  #   container_name: tie_mysql
+  #   command: mysqld
+  #   volumes:
+  #     - tie_data:/var/lib/mysql
+  #   ports:
+  #     - "3306:3306"
+  #   environment:
+  #     - MYSQL_ROOT_PASSWORD=root
+  #     - MYSQL_DATABASE=tie_db
+  #     - MYSQL_USER=tie
+  #     - MYSQL_PASSWORD=tiepasswd
+  #   networks:
+  #     - tie_network
+  #   healthcheck:
+  #     test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "3306", "-u", "root", "-proot"]
+  #     interval: 10s
+  #     timeout: 10s
+  #     retries: 5
 
-  mysql_tie:
-    image: mysql/mysql-server:8.0
-    container_name: TIE_DB
-    command: mysqld
-    volumes:
-      # - mysql-tie:/var/lib/mysql
-      - mysql-tie:/volumes/TI_DB
-    ports:
-      - "33060:3306"
-    hostname: mysql
-    environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_USER=tie
-      - MYSQL_DATABASE=tie_db
-      - MYSQL_PASSWORD=tie
-    networks:
-      - tie_network
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-P", "3306", "-u", "root", "-proot"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
-
-  take_it_easy:
-    depends_on:
-      mysql_tie:
-        condition: service_healthy
+  spring_tie:
+    # depends_on:
+      # mysql_tie:
+        # condition: service_healthy
     build: ./backend
-    container_name: TIE_BACKEND
+    container_name: tie_api
     restart: unless-stopped
-    image: tie_backend
     ports:
       - 8080:8080
-    environment:
-      - spring.datasource.url=jdbc:mysql://mysql:3306/tie_db
-      - spring.datasource.username=tie
-      - spring.datasource.password=tie
-      - spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
-      - spring.jpa.hibernate.ddl-auto=update
-    networks:
-      - tie_network
-
-# volumes:
-#   mysql-tie:
-volumes:
-  mysql-tie:
-    driver: local
-
-networks:
-  tie_network:
-    driver: bridge

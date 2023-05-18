@@ -124,4 +124,15 @@ class StoreServiceTest {
         assertThat(returnedStores.isEmpty());
         verify(storeRepository, times(1)).findByCompany(company);
     }
+
+    @Test
+    void whenCreateStore_thenReturnCreatedStore() {
+        
+        when(storeRepository.save(dummyStore1)).thenReturn(dummyStore1);
+
+        Store returnedStore = storeService.createStore(dummyStore1);
+        
+        assertEquals(dummyStore1, returnedStore);
+        verify(storeRepository, times(1)).save(dummyStore1);
+    }
 }

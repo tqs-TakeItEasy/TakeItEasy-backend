@@ -5,7 +5,6 @@ import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -99,9 +98,9 @@ class DeliveryControllerTest {
         mvc.perform(get("/api/v1/deliveries/delivery/" + Long.toString(id)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.id", is(delivery1.getId().intValue())))
                 .andExpect(jsonPath("$.userName", is(delivery1.getUserName())))
                 .andExpect(jsonPath("$.userEmail", is(delivery1.getUserEmail())))
-                .andExpect(jsonPath("$.packageId", is(delivery1.getPackageId().intValue())))
         ;
     }
 

@@ -39,4 +39,8 @@ public class StoreService {
         return storeRepository.findByCompany(company);
     }
 
+    public Store createStore(Store store) {
+        return storeRepository.save(store);
+    }
+
 }

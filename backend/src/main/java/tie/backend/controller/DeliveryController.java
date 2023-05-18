@@ -1,4 +1,4 @@
-package tie.backend.Controller;
+package tie.backend.controller;
 
 import java.util.List;
 

@@ -18,7 +18,7 @@ import tie.backend.service.PickupPointService;
 @RestController
 @CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
 @RequestMapping("/api/v1/")
-public class Controller{
+public class DeliveryController{
 
     @Autowired
     DeliveryService deliveryService;

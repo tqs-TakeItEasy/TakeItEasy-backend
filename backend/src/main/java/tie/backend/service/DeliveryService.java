@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
+import tie.backend.model.Store;
 import tie.backend.repository.DeliveryRepository;
 
 @Service
@@ -30,13 +31,16 @@ public class DeliveryService {
         }
     }
 
+    public List<Delivery> getDeliveryByPackageId(Long id) {
+        return repository.findByPackageId(id);
+    }
+    
     public List<Delivery> getDeliveriesByPickupPoint(PickupPoint pickupPoint) {
         return repository.findByPickupPoint(pickupPoint);
     }
 
-    public List<Delivery> getDeliveryByPackageId(Long id) {
-        return repository.findByPackageId(id);
+    public List<Delivery> getDeliveriesByStore(Store store){
+        return repository.findByStore(store);
     }
-
 
 }

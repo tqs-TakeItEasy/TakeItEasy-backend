@@ -26,9 +26,6 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "store_name")
-    private String storeName;
-
     @Column(name = "user_name")
     private String userName;
 
@@ -42,6 +39,11 @@ public class Delivery {
     @JoinColumn(name = "pickup_point_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PickupPoint pickupPoint;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "store_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    private Store store;
 
     @Column(name = "status")
     private DeliveryStatus status;
@@ -58,12 +60,12 @@ public class Delivery {
     // CONSTRUCTORS
 
     public Delivery(){}
-    public Delivery(String storeName, String userName, String userEmail, Long packageId, PickupPoint pickupPoint) {
-        this.storeName = storeName;
+    public Delivery(String userName, String userEmail, Long packageId, PickupPoint pickupPoint, Store store) {
         this.userName = userName;
         this.userEmail = userEmail;
         this.packageId = packageId;
         this.pickupPoint = pickupPoint;
+        this.store = store;
         this.status = DeliveryStatus.DISPATCHED;
         this.registeryDate = LocalDate.now().toString();
         this.deliveryDate = null;
@@ -93,8 +95,8 @@ public class Delivery {
     public DeliveryStatus getStatus() {
         return status;
     }
-    public String getStoreName() {
-        return storeName;
+    public Store getStore() {
+        return store;
     }
     public String getUserEmail() {
         return userEmail;
@@ -126,8 +128,8 @@ public class Delivery {
     public void setStatus(DeliveryStatus status) {
         this.status = status;
     }
-    public void setStoreName(String storeName) {
-        this.storeName = storeName;
+    public void setStore(Store store) {
+        this.store = store;
     }
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
@@ -146,11 +148,11 @@ public class Delivery {
             return false;
         }
         Delivery delivery = (Delivery) o;
-        return  Objects.equals(storeName, delivery.storeName) && 
-                Objects.equals(userEmail, delivery.userEmail) && 
+        return  Objects.equals(userEmail, delivery.userEmail) && 
                 Objects.equals(userName, delivery.userName) && 
                 Objects.equals(packageId, delivery.packageId) && 
-                Objects.equals(pickupPoint, delivery.pickupPoint) && 
+                Objects.equals(pickupPoint, delivery.pickupPoint) &&
+                Objects.equals(store, delivery.store) && 
                 Objects.equals(status, delivery.status) && 
                 Objects.equals(registeryDate, delivery.registeryDate) && 
                 Objects.equals(deliveryDate, delivery.deliveryDate) && 
@@ -159,7 +161,7 @@ public class Delivery {
 
     @Override
     public int hashCode() {
-        return Objects.hash(storeName, userEmail, userName, packageId, pickupPoint, status, registeryDate, deliveryDate, pickupDate);
+        return Objects.hash(userEmail, userName, packageId, pickupPoint, store, status, registeryDate, deliveryDate, pickupDate);
     }
 
     // STRING REPRESENTATION
@@ -168,11 +170,11 @@ public class Delivery {
     public String toString() {
         return  "{" +
                 "id='" + getId() + "', " +
-                "storeName='" + getStoreName() + "', " +
                 "userEmail='" + getUserEmail() + "', " +
                 "userName='" + getUserName() + "', " +
                 "packageId='" + getPackageId() + "', " +
                 "pickupPoint='" + getPickupPoint() + "', " +
+                "store='" + getStore() + "', " +
                 "status='" + getStatus() + "', " +
                 "registeryDate='" + getRegisteryDate() + "', " +
                 "deliveryDate='" + getDeliveryDate() + "'" +

@@ -60,7 +60,7 @@ class DeliveryServiceTest {
 
     @Test
     void whenGetDeliveryById_thenReturnDelivery() {
-        when(deliveryRepository.findById(dummyDelivery1.getId())).thenReturn(Optional.ofNullable(dummyDelivery1));
+        when(deliveryRepository.findById(dummyDelivery1.getId())).thenReturn(Optional.of(dummyDelivery1));
 
         Delivery returnedDelivery = deliveryService.getDeliveryById(dummyDelivery1.getId());
 

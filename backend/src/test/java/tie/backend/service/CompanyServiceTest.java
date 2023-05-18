@@ -57,7 +57,7 @@ class CompanyServiceTest {
 
     @Test
     void whenGetCompanyById_thenReturnCompany() {
-        when(companyRepository.findById(dummyCompany1.getId())).thenReturn(Optional.ofNullable(dummyCompany1));
+        when(companyRepository.findById(dummyCompany1.getId())).thenReturn(Optional.of(dummyCompany1));
 
         Company returnedCompany = companyService.getCompanyById(dummyCompany1.getId());
 

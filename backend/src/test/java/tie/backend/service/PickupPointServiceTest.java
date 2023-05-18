@@ -55,7 +55,7 @@ class PickupPointServiceTest {
 
     @Test
     void whenGetPickupPointById_thenReturnPickupPoint() {
-        when(pickupPointRepository.findById(dummyPickupPoint2.getId())).thenReturn(Optional.ofNullable(dummyPickupPoint2));
+        when(pickupPointRepository.findById(dummyPickupPoint2.getId())).thenReturn(Optional.of(dummyPickupPoint2));
 
         PickupPoint returnedPickupPoint = pickupPointService.getPickupPointById(dummyPickupPoint2.getId());
 

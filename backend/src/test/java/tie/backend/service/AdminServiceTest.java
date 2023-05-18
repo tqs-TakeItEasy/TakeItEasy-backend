@@ -60,7 +60,7 @@ class AdminServiceTest {
 
     @Test
     void whenGetAdminById_thenReturnAdmin() {
-        when(adminRepository.findById(dummyAdmin1.getId())).thenReturn(Optional.ofNullable(dummyAdmin1));
+        when(adminRepository.findById(dummyAdmin1.getId())).thenReturn(Optional.of(dummyAdmin1));
 
         Admin returnedAdmin = adminService.getAdminById(dummyAdmin1.getId());
 
@@ -101,5 +101,27 @@ class AdminServiceTest {
 
         assertThat(returnedAdmins.isEmpty());
         verify(adminRepository, times(1)).findByEmail(invalidEmail);
+    }
+
+    @Test
+    void whenGetAdminsByCompany_thenReturnAdmins(){
+        when(adminRepository.findByCompany(dummyCompany)).thenReturn(dummyAdmins);
+
+        List<Admin> returnedAdmins = adminService.getAdminByCompany(dummyCompany);
+
+        assertEquals(dummyAdmins, returnedAdmins);
+        verify(adminRepository, times(1)).findByCompany(dummyCompany);
+    }
+
+    @Test
+    void whenGetAdminByInvalidCompany_thenReturnEmptyList(){
+        Company company = new Company();
+
+        when(adminRepository.findByCompany(company)).thenReturn(new ArrayList<>());
+
+        List<Admin> returnedAdmins = adminService.getAdminByCompany(company);
+
+        assertThat(returnedAdmins.isEmpty());
+        verify(adminRepository, times(1)).findByCompany(company);
     }
 }

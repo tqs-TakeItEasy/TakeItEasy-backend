@@ -57,7 +57,7 @@ class NotificationServiceTest {
 
     @Test
     void whenGetNotificationById_thenReturnNotification(){
-        when(notificationRepository.findById(dummyNotification1.getId())).thenReturn(Optional.ofNullable(dummyNotification1));
+        when(notificationRepository.findById(dummyNotification1.getId())).thenReturn(Optional.of(dummyNotification1));
         
         Notification returnedNotifcation = notificationService.getNotificationById(dummyNotification1.getId());
         

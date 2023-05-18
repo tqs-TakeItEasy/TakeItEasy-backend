@@ -61,7 +61,7 @@ class NotificationServiceTest {
         
         Notification returnedNotifcation = notificationService.getNotificationById(dummyNotification1.getId());
         
-        assertEquals(dummyNotifications, returnedNotifcation);
+        assertEquals(dummyNotification1, returnedNotifcation);
         verify(notificationRepository, times(1)).findById(dummyNotification1.getId());
     }
 
@@ -74,7 +74,7 @@ class NotificationServiceTest {
         Notification returnedNotifcation = notificationService.getNotificationById(id);
         
         assertNull(returnedNotifcation);
-        verify(notificationRepository, times(1)).findById(dummyNotification1.getId());
+        verify(notificationRepository, times(1)).findById(id);
     }
 
     @Test

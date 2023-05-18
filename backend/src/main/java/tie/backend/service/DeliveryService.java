@@ -20,10 +20,6 @@ public class DeliveryService {
         return repository.findAll();
     }
 
-    public List<Delivery> getDeliveriesByPickupPoint(PickupPoint pickupPoint) {
-        return repository.findByPickupPoint(pickupPoint);
-    }
-
     public Delivery getDeliveryById(Long deliveryId) {
         Optional<Delivery> delivery = repository.findById(deliveryId);
 
@@ -32,6 +28,10 @@ public class DeliveryService {
         } else {
             return null;
         }
+    }
+
+    public List<Delivery> getDeliveriesByPickupPoint(PickupPoint pickupPoint) {
+        return repository.findByPickupPoint(pickupPoint);
     }
 
     public List<Delivery> getDeliveryByPackageId(Long id) {

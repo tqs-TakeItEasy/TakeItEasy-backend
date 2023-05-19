@@ -57,9 +57,9 @@ class DeliveryControllerTest {
     void setUp() {
         deliveries = new ArrayList<>();
         
-        pickupPoint1 = new PickupPoint("name1", "address1");
-        pickupPoint2 = new PickupPoint("name2", "address2");
-        pickupPoint3 = new PickupPoint("name3", "address3");
+        pickupPoint1 = new PickupPoint("name1", "address1", "mail1@mail.com");
+        pickupPoint2 = new PickupPoint("name2", "address2", "mail2@mail.com");
+        pickupPoint3 = new PickupPoint("name3", "address3", "mail3@mail.com");
         
         store = new Store();
 
@@ -123,6 +123,5 @@ class DeliveryControllerTest {
                 .andExpect(jsonPath("$[0].packageId", is(delivery1.getPackageId().intValue())))
         ;
     }
-
-    
+   
 }

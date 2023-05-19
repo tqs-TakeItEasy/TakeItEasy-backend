@@ -133,6 +133,5 @@ class DeliveryControllerTest {
         verify(pickupPointService, times(1)).getPickupPointById(delivery1.getPickupPoint().getId());
         verify(deliveryService, times(1)).getDeliveriesByPickupPoint(delivery1.getPickupPoint());
     }
-
-    
+   
 }

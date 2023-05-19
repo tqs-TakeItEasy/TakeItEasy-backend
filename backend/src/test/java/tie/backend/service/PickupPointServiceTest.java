@@ -1,12 +1,15 @@
 package tie.backend.service;
 
 import org.junit.jupiter.api.Assertions;
+// import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.server.ResponseStatusException;
+
+// import org.springframework.web.server.ResponseStatusException;
 import tie.backend.model.PickupPoint;
 import tie.backend.repository.PickupPointRepository;
 
@@ -56,7 +59,7 @@ class PickupPointServiceTest {
     void whenGetPickupPointById_thenReturnPickupPoint() {
         when(pickupPointRepository.findById(dummyPickupPoint2.getId())).thenReturn(Optional.of(dummyPickupPoint2));
 
-        PickupPoint returnedPickupPoint = pickupPointService.getPickupPointById(dummyPickupPoint2.getId());
+        PickupPoint returnedPickupPoint = pickupPointService.getPickupPointById(dummyPickupPoint2.getId()).orElse(null);
 
         assertEquals(dummyPickupPoint2, returnedPickupPoint);
         verify(pickupPointRepository, times(1)).findById(dummyPickupPoint2.getId());
@@ -68,7 +71,7 @@ class PickupPointServiceTest {
 
         when(pickupPointRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
-        PickupPoint returnedPickupPoint = pickupPointService.getPickupPointById(id);
+        PickupPoint returnedPickupPoint = pickupPointService.getPickupPointById(id).orElse(null);
 
         assertNull(returnedPickupPoint);
         verify(pickupPointRepository, times(1)).findById(id);
@@ -77,15 +80,12 @@ class PickupPointServiceTest {
 
     @Test
     void WhenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){
-        //  mock repository responses
-        when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.empty());
-        when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.empty());
+        when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.ofNullable(null));
+        when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.ofNullable(null));
 
-        //  create new PickupPoint and assert its created as suposed
         PickupPoint NewPickupPoint = pickupPointService.addPickupPoint(dummyPickupPoint1);
         assertEquals( dummyPickupPoint1,  NewPickupPoint);
 
-        // verify if the service methods where called as suposed
         verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
         verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
         verify(pickupPointRepository, times(1)).save(dummyPickupPoint1);
@@ -93,17 +93,14 @@ class PickupPointServiceTest {
 
     @Test
     void WhenAddInvalidPickupPointName_ThenReturnInvalidName(){
-        //  mock repository responses
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.of(dummyPickupPoint1));
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.empty());
 
-        //  see if the expected exception and message are correct
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
             pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
-        Assertions.assertEquals("This Pickup Name already exists", exception.getReason());
+        Assertions.assertEquals("This PickupPoint's name already exists", exception.getReason());
 
-        // verify if the service methods where called as suposed
         verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
         verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
         verify(pickupPointRepository, times(0)).save(dummyPickupPoint1);
@@ -111,17 +108,14 @@ class PickupPointServiceTest {
 
     @Test
     void WhenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
-        //  mock repository responses
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.empty());
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.of(dummyPickupPoint1));
 
-        //  see if the expected exception and message are correct
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
             pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
-        Assertions.assertEquals("This Pickup Email already exists", exception.getReason());
+        Assertions.assertEquals("This PickupPoint's email already exists", exception.getReason());
 
-        // verify if the service methods where called as suposed
         verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
         verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
         verify(pickupPointRepository, times(0)).save(dummyPickupPoint1);

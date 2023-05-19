@@ -1,11 +1,9 @@
 package tie.backend.repository;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -59,7 +57,7 @@ class CompanyRepositoryTest {
     }
 
     @Test
-    void whenGetCompanyByInvalidId_thenReturnNullable(){
+    void whenGetCompanyByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         Company returnedCompany = companyRepository.findById(invalidId).orElse(null);
 
@@ -69,17 +67,17 @@ class CompanyRepositoryTest {
     @Test
     void whenGetCompanyByName_thenReturnCompany(){
         testEntityManager.persistAndFlush(dummyCompany1);
-        List<Company> dummyCompany1List = new ArrayList<>(Arrays.asList(dummyCompany1));
-        List<Company> returnedCompanies = companyRepository.findByName(dummyCompany1.getName());
+
+        Company returnedCompany = companyRepository.findByName(dummyCompany1.getName()).orElse(null);
         
-        assertEquals(dummyCompany1List, returnedCompanies);
+        assertEquals(dummyCompany1, returnedCompany);
     }
 
     @Test
     void whenGetCompanyByInvalidName_thenEmptyList(){
         String invalidName = "some email";
-        List<Company> returnedCompanies = companyRepository.findByName(invalidName);
+        Company returnedCompany = companyRepository.findByName(invalidName).orElse(null);
 
-        assertThat(returnedCompanies.isEmpty());
+        assertNull(returnedCompany);
     }
 }

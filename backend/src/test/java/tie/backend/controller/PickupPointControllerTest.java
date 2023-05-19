@@ -41,12 +41,11 @@ class PickupPointControllerTest {
     }
 
     @Test
-    void whenAddNewValidPickupPoint_thenReturnPickupPointAnd200() throws Exception {
-        // mock the service response
+    void whenAddPickupPoint_thenReturnPickupPoint() throws Exception {
+
         when(pickupPointService.addPickupPoint(dummyPickupPoint1)).thenReturn(dummyPickupPoint1);
 
-        // perform the request
-        mvc.perform(post("/api/v1/pickuppoint/add/")
+        mvc.perform(post("/api/v1/pickuppoints/add/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.toJson(dummyPickupPoint1)))
                 .andExpect(status().isOk())
@@ -54,7 +53,6 @@ class PickupPointControllerTest {
                 .andExpect(jsonPath("$.address").value(dummyPickupPoint1.getAddress()))
                 .andExpect(jsonPath("$.email").value(dummyPickupPoint1.getEmail()));
 
-        // verify if the method is called
         verify(pickupPointService, times(1)).addPickupPoint(dummyPickupPoint1);
     }
 

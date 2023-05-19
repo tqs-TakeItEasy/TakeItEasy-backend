@@ -20,22 +20,15 @@ public class AdminService {
         return adminRepository.findAll();
     }
 
-    public Admin getAdminById(Long id) {
-        Optional<Admin> admin = adminRepository.findById(id);
-
-        if (admin.isPresent()){
-            return admin.get();
-        } else {
-            return null;
-        }
+    public Optional<Admin> getAdminById(Long id) {
+        return adminRepository.findById(id);
     }
 
-    public List<Admin> getAdminByEmail(String email) {
+    public Optional<Admin> getAdminByEmail(String email) {
         return adminRepository.findByEmail(email);
     }
 
     public List<Admin> getAdminByCompany(Company company) {
         return adminRepository.findByCompany(company);
     }
-    
 }

@@ -64,7 +64,7 @@ class StoreRepositoryTest {
     }
 
     @Test
-    void whenGetStoreByInvalidId_thenReturnNullable(){
+    void whenGetStoreByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         Store returnedStore = storeRepository.findById(invalidId).orElse(null);
 
@@ -74,18 +74,18 @@ class StoreRepositoryTest {
     @Test
     void whenGetStoreByName_thenReturnStore(){
         testEntityManager.persistAndFlush(dummyStore1);
-        List<Store> dummyStore1List = new ArrayList<>(Arrays.asList(dummyStore1));
-        List<Store> returnedStores = storeRepository.findByName(dummyStore1.getName());
+
+        Store returnedStore = storeRepository.findByName(dummyStore1.getName()).orElse(null);
         
-        assertEquals(dummyStore1List, returnedStores);
+        assertEquals(dummyStore1, returnedStore);
     }
 
     @Test
-    void whenGetStoreByInvalidName_thenEmptyList(){
+    void whenGetStoreByInvalidName_thenReturnNull(){
         String invalidName = "some email";
-        List<Store> returnedStores = storeRepository.findByName(invalidName);
+        Store returnedStore = storeRepository.findByName(invalidName).orElse(null);
 
-        assertThat(returnedStores.isEmpty());
+        assertNull(returnedStore);
     }
 
     @Test

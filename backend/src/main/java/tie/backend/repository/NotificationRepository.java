@@ -9,7 +9,5 @@ import tie.backend.model.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification,Long>{
-
     List<Notification> findByUserEmail(String email);
-    
 }

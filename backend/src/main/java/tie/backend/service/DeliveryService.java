@@ -21,17 +21,11 @@ public class DeliveryService {
         return repository.findAll();
     }
 
-    public Delivery getDeliveryById(Long deliveryId) {
-        Optional<Delivery> delivery = repository.findById(deliveryId);
-
-        if (delivery.isPresent()){
-            return delivery.get();
-        } else {
-            return null;
-        }
+    public Optional<Delivery> getDeliveryById(Long deliveryId) {
+        return repository.findById(deliveryId);
     }
 
-    public List<Delivery> getDeliveryByPackageId(Long id) {
+    public Optional<Delivery> getDeliveryByPackageId(Long id) {
         return repository.findByPackageId(id);
     }
     

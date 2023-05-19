@@ -11,11 +11,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.model.Store;
@@ -124,13 +126,32 @@ class StoreServiceTest {
     }
 
     @Test
-    void whenCreateStore_thenReturnCreatedStore() {
-        
-        // when(storeRepository.save(dummyStore1)).thenReturn(dummyStore1);
+    void WhenAddInvalidStoreName_ThenReturnInvalidName(){
+        when(storeRepository.findByName(dummyStore1.getName())).thenReturn(Optional.of(dummyStore1));
+        when(storeRepository.findByEmail(dummyStore1.getEmail())).thenReturn(Optional.empty());
 
-        // Store returnedStore = storeService.createStore(dummyStore1);
-        
-        // assertEquals(dummyStore1, returnedStore);
-        // verify(storeRepository, times(1)).save(dummyStore1);
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            storeService.addStore(dummyStore1);
+        });
+        Assertions.assertEquals("This Store's name already exists", exception.getReason());
+
+        verify(storeRepository, times(1)).findByName(dummyStore1.getName());
+        verify(storeRepository, times(1)).findByEmail(dummyStore1.getEmail());
+        verify(storeRepository, times(0)).save(dummyStore1);
+    }
+
+    @Test
+    void WhenAddInvalidStoreEmail_ThenReturnInvalidEmail(){
+        when(storeRepository.findByName(dummyStore1.getName())).thenReturn(Optional.empty());
+        when(storeRepository.findByEmail(dummyStore1.getEmail())).thenReturn(Optional.of(dummyStore1));
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            storeService.addStore(dummyStore1);
+        });
+        Assertions.assertEquals("This Store's email already exists", exception.getReason());
+
+        verify(storeRepository, times(1)).findByName(dummyStore1.getName());
+        verify(storeRepository, times(1)).findByEmail(dummyStore1.getEmail());
+        verify(storeRepository, times(0)).save(dummyStore1);
     }
 }

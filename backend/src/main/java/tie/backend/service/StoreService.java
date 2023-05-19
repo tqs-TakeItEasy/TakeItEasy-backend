@@ -38,7 +38,7 @@ public class StoreService {
     public Store addStore(Store store) {
         Optional<Store> storeByName = storeRepository.findByName(store.getName());
         Optional<Store> storeByEmail = storeRepository.findByEmail(store.getEmail());
-        
+
         if (storeByName.isPresent()){
             throw new ResponseStatusException(HttpStatus.OK, "This Store's name already exists");
         } else if (storeByEmail.isPresent()) {

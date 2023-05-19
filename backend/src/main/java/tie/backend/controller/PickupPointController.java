@@ -20,11 +20,10 @@ public class PickupPointController {
     @Autowired
     PickupPointService pickupPointService;
 
-
     // POST - NEW PICKUP POINT
     @PostMapping("add/")
-    public ResponseEntity<PickupPoint> addPickupPoint(@RequestBody PickupPoint newPickupPoint) {
-        PickupPoint pickupPoint = pickupPointService.addPickupPoint(newPickupPoint);
-        return ResponseEntity.ok().body(pickupPoint);
+    public ResponseEntity<PickupPoint> addPickupPoint(@RequestBody PickupPoint pickupPoint) {
+        PickupPoint newPickupPoint = pickupPointService.addPickupPoint(pickupPoint);
+        return ResponseEntity.ok().body(newPickupPoint);
     }
 }

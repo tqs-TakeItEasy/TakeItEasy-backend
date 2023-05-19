@@ -1,5 +1,6 @@
 package tie.backend.controller;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -44,9 +45,10 @@ public class StoreController {
         return ResponseEntity.noContent().build();
     }
 
+    // POST - Add New Pickup Point
     @PostMapping("add/")
-    public ResponseEntity<Store> addStore(@RequestBody Store store){
-        storeService.addStore(store);
-        return ResponseEntity.ok().body(store);
+    public ResponseEntity<Store> addStore(@RequestBody Store pickupPoint) {
+        Store newStore = storeService.addStore(pickupPoint);
+        return ResponseEntity.ok().body(newStore);
     }
 }

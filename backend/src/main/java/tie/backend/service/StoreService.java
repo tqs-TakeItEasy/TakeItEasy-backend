@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.model.Store;
@@ -21,17 +23,11 @@ public class StoreService {
         return storeRepository.findAll();
     }
 
-    public Store getStoreById(Long id) {
-        Optional<Store> store = storeRepository.findById(id);
-        
-        if (store.isPresent()){
-            return store.get();
-        } else {
-            return null;
-        }
+    public Optional<Store> getStoreById(Long id) {
+        return storeRepository.findById(id);
     }
 
-    public List<Store> getStoreByName(String name) {
+    public Optional<Store> getStoreByName(String name) {
         return storeRepository.findByName(name);
     }
 
@@ -39,8 +35,17 @@ public class StoreService {
         return storeRepository.findByCompany(company);
     }
 
-    public Store createStore(Store store) {
-        return storeRepository.save(store);
-    }
+    public Store addStore(Store store) {
+        Optional<Store> storeByName = storeRepository.findByName(store.getName());
+        Optional<Store> storeByEmail = storeRepository.findByEmail(store.getEmail());
 
+        if (storeByName.isPresent()){
+            throw new ResponseStatusException(HttpStatus.OK, "This Store's name already exists");
+        } else if (storeByEmail.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.OK, "This Store's email already exists");
+        } else {
+            storeRepository.save(store);
+            return store;
+        }
+    }
 }

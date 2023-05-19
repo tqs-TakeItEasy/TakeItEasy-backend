@@ -59,7 +59,7 @@ class NotificationRepositoryTest {
     }
 
     @Test
-    void whenGetNotificationByInvalidId_thenReturnNullable(){
+    void whenGetNotificationByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         Notification returnedNotification = notificationRepository.findById(invalidId).orElse(null);
 

@@ -57,7 +57,7 @@ class PickupPointRepositoryTest {
     }
 
     @Test
-    void whenGetPickupPointByInvalidId_thenReturnNullable(){
+    void whenGetPickupPointByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         PickupPoint returnedPickupPoint = pickupPointRepository.findById(invalidId).orElse(null);
 

@@ -1,8 +1,8 @@
 package tie.backend.controller;
 
-import java.util.List;
 
-import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -33,21 +33,22 @@ public class StoreController {
     }
 
     // GET - Store by Identifier
-    @GetMapping("store/{store_id}")
+    @GetMapping("store/{store_id}/")
     public ResponseEntity<Store> getStoreById(@PathVariable(value="store_id") String storeId) {
-        Store store = storeService.getStoreById(Long.valueOf(storeId));
-        if (store == null){
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok().body(store);
-    }
-
-    @PostMapping("new")
-    public ResponseEntity<Store> createStore(@Valid @RequestBody Store store){
-        Store returnedStore = storeService.createStore(store);
-        if (returnedStore == null){
+        if (!storeId.matches("\\d+")){
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body(returnedStore);
+        Optional<Store> store = storeService.getStoreById(Long.valueOf(storeId));
+        if(store.isPresent()){
+            return ResponseEntity.ok().body(store.get());
+        }
+        return ResponseEntity.noContent().build();
+    }
+
+    // POST - Add New Pickup Point
+    @PostMapping("add/")
+    public ResponseEntity<Store> addStore(@RequestBody Store pickupPoint) {
+        Store newStore = storeService.addStore(pickupPoint);
+        return ResponseEntity.ok().body(newStore);
     }
 }

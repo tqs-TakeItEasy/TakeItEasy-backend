@@ -1,6 +1,13 @@
 package tie.backend.controller;
 
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +18,10 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import tie.backend.config.JsonUtils;
 import tie.backend.model.PickupPoint;
 import tie.backend.service.PickupPointService;
-
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 
@@ -41,12 +45,11 @@ class PickupPointControllerTest {
     }
 
     @Test
-    void whenAddNewValidPickupPoint_thenReturnPickupPointAnd200() throws Exception {
-        // mock the service response
+    void whenAddPickupPoint_thenReturnPickupPoint() throws Exception {
+
         when(pickupPointService.addPickupPoint(dummyPickupPoint1)).thenReturn(dummyPickupPoint1);
 
-        // perform the request
-        mvc.perform(post("/api/v1/pickuppoint/add/")
+        mvc.perform(post("/api/v1/pickuppoints/add/")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtils.toJson(dummyPickupPoint1)))
                 .andExpect(status().isOk())
@@ -54,7 +57,6 @@ class PickupPointControllerTest {
                 .andExpect(jsonPath("$.address").value(dummyPickupPoint1.getAddress()))
                 .andExpect(jsonPath("$.email").value(dummyPickupPoint1.getEmail()));
 
-        // verify if the method is called
         verify(pickupPointService, times(1)).addPickupPoint(dummyPickupPoint1);
     }
 

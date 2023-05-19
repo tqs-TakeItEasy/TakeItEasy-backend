@@ -19,14 +19,8 @@ public class NotificationService {
         return notificationRepository.findAll();
     }
 
-    public Notification getNotificationById(Long id) {
-        Optional<Notification> notification = notificationRepository.findById(id);
-    
-        if (notification.isPresent()){
-            return notification.get();
-        } else {
-            return null;
-        }
+    public Optional<Notification> getNotificationById(Long id) {
+        return notificationRepository.findById(id);
     }
 
     public List<Notification> getNotificationByUserEmail(String invalidEmail) {

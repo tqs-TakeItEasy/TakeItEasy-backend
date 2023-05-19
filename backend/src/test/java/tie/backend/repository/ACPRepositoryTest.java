@@ -36,7 +36,9 @@ class ACPRepositoryTest {
     @BeforeEach
     void setUp(){
         dummyACPs = new ArrayList<>();
+
         dummyCompany = new Company();
+
         dummyACP1 = new ACP("name1", "email1", "pwd1", dummyCompany, dummyPickupPoint);
         dummyACP2 = new ACP("name2", "email2", "pwd2", dummyCompany, dummyPickupPoint);
 
@@ -66,7 +68,7 @@ class ACPRepositoryTest {
     }
 
     @Test
-    void whenGetACPByInvalidId_thenReturnNullable(){
+    void whenGetACPByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         ACP returnedACP = acpRepository.findById(invalidId).orElse(null);
 
@@ -76,18 +78,18 @@ class ACPRepositoryTest {
     @Test
     void whenGetACPByEmail_thenReturnACP(){
         testEntityManager.persistAndFlush(dummyACP1);
-        List<ACP> dummyACP1List = new ArrayList<>(Arrays.asList(dummyACP1));
-        List<ACP> returnedACPs = acpRepository.findByEmail(dummyACP1.getEmail());
+
+        ACP returnedACP = acpRepository.findByEmail(dummyACP1.getEmail()).orElse(null);
         
-        assertEquals(dummyACP1List, returnedACPs);
+        assertEquals(dummyACP1, returnedACP);
     }
 
     @Test
-    void whenGetACPByInvalidEmail_thenEmptyList(){
+    void whenGetACPByInvalidEmail_thenReturnNull(){
         String invalidEmail = "some email";
-        List<ACP> returnedACPs = acpRepository.findByEmail(invalidEmail);
+        ACP returnedACP = acpRepository.findByEmail(invalidEmail).orElse(null);
 
-        assertThat(returnedACPs.isEmpty());
+        assertNull(returnedACP);
     }
 
     @Test
@@ -101,7 +103,7 @@ class ACPRepositoryTest {
     }
 
     @Test
-    void whenGetACPByInvalidCompany_thenEmptyList(){
+    void whenGetACPByInvalidCompany_thenReturnNull(){
         Company company = new Company();
         testEntityManager.persistAndFlush(company);
 
@@ -123,6 +125,7 @@ class ACPRepositoryTest {
     @Test
     void whenGetACPByPickupPoint_thenEmptyList(){
         PickupPoint pickupPoint = new PickupPoint();
+        
         testEntityManager.persistAndFlush(pickupPoint);
 
         List<ACP> returnedACPs = acpRepository.findByPickupPoint(pickupPoint);

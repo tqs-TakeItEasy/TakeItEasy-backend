@@ -45,11 +45,12 @@ public class PickupPoint {
     // CONSTRUCTORS
 
     public PickupPoint(){}
-    public PickupPoint(String name, String address, String email) {
+    public PickupPoint(String name, String address, String email, Company company) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.status = PickupPointStatus.AVAILABLE;
+        this.company = company;
     }
 
     // GETTERS

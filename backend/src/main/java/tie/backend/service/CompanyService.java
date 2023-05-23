@@ -26,4 +26,8 @@ public class CompanyService {
     public Optional<Company> getCompanyByName(String name) {
         return companyRepository.findByName(name);
     }
+
+    public Object addCompany(Company dummyCompany1) {
+        return null;
+    }
 }

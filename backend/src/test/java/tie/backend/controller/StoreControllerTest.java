@@ -28,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.model.Company;
 import tie.backend.model.Store;
+import tie.backend.service.CompanyService;
 import tie.backend.service.StoreService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -40,7 +41,10 @@ class StoreControllerTest {
 
     @MockBean
     private StoreService storeService;
-    
+
+    @MockBean
+    private CompanyService companyService;
+
     private List<Store> dummyStores;
     private Company dummyCompany1;
     private Company dummyCompany2;
@@ -105,7 +109,7 @@ class StoreControllerTest {
     @Test
     void whenAddStore_thenReturnStore() throws Exception {
 
-        // when(storeService.addStore(dummyStore1)).thenReturn(dummyStore1);
+        when(storeService.addStore(dummyStore1)).thenReturn(dummyStore1);
 
         // mvc.perform(post("/api/v1/stores/add/")
         //         .contentType(MediaType.APPLICATION_JSON)

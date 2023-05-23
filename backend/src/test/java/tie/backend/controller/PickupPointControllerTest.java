@@ -20,7 +20,9 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.config.JsonUtils;
+import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
+import tie.backend.service.CompanyService;
 import tie.backend.service.PickupPointService;
 
 
@@ -36,17 +38,24 @@ class PickupPointControllerTest {
     @MockBean
     private PickupPointService pickupPointService;
 
+    @MockBean
+    private CompanyService companyService;
+
+    private Company dummyCompany1;
     private PickupPoint dummyPickupPoint1;
 
     @BeforeEach
     void setUp() {
-        dummyPickupPoint1 = new PickupPoint("name1", "address1", "email1");
-        dummyPickupPoint1.setId(1L);
+        dummyCompany1 = new Company("name1", "email1");
+
+        dummyPickupPoint1 = new PickupPoint("name1", "address1", "email1", dummyCompany1);
+        // dummyPickupPoint1.setId(1L);
     }
 
     @Test
     void whenAddPickupPoint_thenReturnPickupPoint() throws Exception {
 
+        when(companyService.addCompany(dummyCompany1)).thenReturn(dummyCompany1);
         when(pickupPointService.addPickupPoint(dummyPickupPoint1)).thenReturn(dummyPickupPoint1);
 
         mvc.perform(post("/api/v1/pickuppoints/add/")

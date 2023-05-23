@@ -3,18 +3,17 @@ package tie.backend.controller;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.hasSize;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +26,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.Store;
 import tie.backend.service.StoreService;
@@ -47,9 +45,9 @@ class StoreControllerTest {
     private Company dummyCompany1;
     private Company dummyCompany2;
     private Company dummyCompany3;
-    private Store store1;
-    private Store store2;
-    private Store store3;
+    private Store dummyStore1;
+    private Store dummyStore2;
+    private Store dummyStore3;
 
     @BeforeEach
     void setUp() {
@@ -59,13 +57,13 @@ class StoreControllerTest {
         dummyCompany2 = new Company("name2", "email2");
         dummyCompany3 = new Company("name3", "email3");
         
-        store1 = new Store("name1", "email1", dummyCompany1); 
-        store2 = new Store("name2", "email2", dummyCompany2);
-        store3 = new Store("name3", "email3", dummyCompany3);
+        dummyStore1 = new Store("name1", "email1", dummyCompany1); 
+        dummyStore2 = new Store("name2", "email2", dummyCompany2);
+        dummyStore3 = new Store("name3", "email3", dummyCompany3);
 
-        dummyStores.add(store1);
-        dummyStores.add(store2);
-        dummyStores.add(store3);
+        dummyStores.add(dummyStore1);
+        dummyStores.add(dummyStore2);
+        dummyStores.add(dummyStore3);
     }
 
     @Test
@@ -81,35 +79,42 @@ class StoreControllerTest {
                 .andExpect(jsonPath("$[1].name", is(dummyCompany2.getName())))
                 .andExpect(jsonPath("$[2].name", is(dummyCompany3.getName())))
         ;
+
+        verify(storeService, times(1)).getAllStores();
     }
 
     @Test
     void whenGetStoreById_thenReturnStore() throws Exception{
 
         Long id = 1L;
-        store1.setId(id);
+        dummyStore1.setId(id);
         
-        when(storeService.getStoreById(store1.getId())).thenReturn(store1);
+        when(storeService.getStoreById(dummyStore1.getId())).thenReturn(Optional.of(dummyStore1));
 
-        mvc.perform(get("/api/v1/stores/store/" + Long.toString(id)).contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/v1/stores/store/" + Long.toString(id) + "/").contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(jsonPath("$.id", is(store1.getId().intValue())))
-            .andExpect(jsonPath("$.name", is(store1.getName())))
-            .andExpect(jsonPath("$.email", is(store1.getEmail())))
+            .andExpect(jsonPath("$.id", is(dummyStore1.getId().intValue())))
+            .andExpect(jsonPath("$.name", is(dummyStore1.getName())))
+            .andExpect(jsonPath("$.email", is(dummyStore1.getEmail())))
         ;
+        
+        verify(storeService, times(1)).getStoreById(dummyStore1.getId());
     }
 
-    // @Test
-    // void whenCreateStore_thenReturnStore() throws Exception{
-    //     List<Store> testStores = new ArrayList<>(Arrays.asList(store1));
+    @Test
+    void whenAddStore_thenReturnStore() throws Exception {
 
-    //     mvc.perform(post("/api/v1/stores/new").contentType(MediaType.APPLICATION_JSON).content(JsonUtils.toJson(store1)));
+        // when(storeService.addStore(dummyStore1)).thenReturn(dummyStore1);
 
-    //     List<Store> returnedStores = storeService.getAllStores();
+        // mvc.perform(post("/api/v1/stores/add/")
+        //         .contentType(MediaType.APPLICATION_JSON)
+        //         .content(JsonUtils.toJson(dummyStore1)))
+        //         .andDo(print())
+        //         .andExpect(status().isOk())
+        //         .andExpect(jsonPath("$.name").value(dummyStore1.getName()))
+        //         .andExpect(jsonPath("$.email").value(dummyStore1.getEmail()));
 
-    //     assertEquals(testStores, returnedStores);
-
-    // }
-
+        // verify(storeService, times(1)).addStore(dummyStore1);
+    }
 }

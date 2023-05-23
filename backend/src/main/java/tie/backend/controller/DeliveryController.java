@@ -1,6 +1,7 @@
 package tie.backend.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,24 +35,30 @@ public class DeliveryController{
     }
 
     // GET - Deliveriy by Identifier
-    @GetMapping("delivery/{deliveryId}")
+    @GetMapping("delivery/{deliveryId}/")
     public ResponseEntity<Delivery> getDeliveryById(@PathVariable(value="deliveryId") String deliveryId) {
-        Delivery delivery = deliveryService.getDeliveryById(Long.valueOf(deliveryId));
-        if (delivery == null){
-            return ResponseEntity.noContent().build();
+        if (!deliveryId.matches("\\d+")){
+            return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok().body(delivery);
+        Optional<Delivery> delivery = deliveryService.getDeliveryById(Long.valueOf(deliveryId));
+        if(delivery.isPresent()){
+            return ResponseEntity.ok().body(delivery.get());
+        }
+        return ResponseEntity.noContent().build();
     }
 
     // GET - Deliveries By Pickup Point Identifier
-    @GetMapping("point/{pickupPointId}")
+    @GetMapping("point/{pickupPointId}/")
     public ResponseEntity<List<Delivery>> getDeliveriesByPickupPointId(@PathVariable(value="pickupPointId") String pickupPointId) {
         if (!pickupPointId.matches("\\d+")){
             return ResponseEntity.badRequest().build();
         }
-        PickupPoint pickupPoint = pickupPointService.getPickupPointById(Long.parseLong(pickupPointId));
-        List<Delivery> deliveries = deliveryService.getDeliveriesByPickupPoint(pickupPoint);
-        return ResponseEntity.ok().body(deliveries);
+        Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(Long.parseLong(pickupPointId));
+        if(pickupPoint.isPresent()){
+            List<Delivery> deliveries = deliveryService.getDeliveriesByPickupPoint(pickupPoint.get());
+            return ResponseEntity.ok().body(deliveries);
+        }
+        return ResponseEntity.noContent().build();
     }
 
 }

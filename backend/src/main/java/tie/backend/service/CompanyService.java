@@ -19,18 +19,11 @@ public class CompanyService {
         return companyRepository.findAll();
     }
 
-    public Company getCompanyById(Long id) {
-        Optional<Company> company = companyRepository.findById(id);
-        
-        if (company.isPresent()){
-            return company.get();
-        } else {
-            return null;
-        }
+    public Optional<Company> getCompanyById(Long id) {
+        return companyRepository.findById(id);
     }
 
-    public List<Company> getCompanyByName(String name) {
+    public Optional<Company> getCompanyByName(String name) {
         return companyRepository.findByName(name);
     }
-    
 }

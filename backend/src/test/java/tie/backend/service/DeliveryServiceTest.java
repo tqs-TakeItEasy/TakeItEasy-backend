@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -66,7 +65,7 @@ class DeliveryServiceTest {
     void whenGetDeliveryById_thenReturnDelivery() {
         when(deliveryRepository.findById(dummyDelivery1.getId())).thenReturn(Optional.of(dummyDelivery1));
 
-        Delivery returnedDelivery = deliveryService.getDeliveryById(dummyDelivery1.getId());
+        Delivery returnedDelivery = deliveryService.getDeliveryById(dummyDelivery1.getId()).orElse(null);
 
         assertEquals(dummyDelivery1, returnedDelivery);
         verify(deliveryRepository, times(1)).findById(dummyDelivery1.getId());
@@ -78,7 +77,7 @@ class DeliveryServiceTest {
 
         when(deliveryRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
-        Delivery returnedDelivery = deliveryService.getDeliveryById(id);
+        Delivery returnedDelivery = deliveryService.getDeliveryById(id).orElse(null);
 
         assertNull(returnedDelivery);
         verify(deliveryRepository, times(1)).findById(id);
@@ -86,24 +85,23 @@ class DeliveryServiceTest {
 
     @Test
     void whenGetDeliveryByPackageId_thenReturnPackageDeliveries() {
-        List<Delivery> listedDummyDelivery1 = new ArrayList<Delivery>(Arrays.asList(dummyDelivery1));
-        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(listedDummyDelivery1);
+        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.of(dummyDelivery1));
 
-        List<Delivery> returnedDeliveries = deliveryService.getDeliveryByPackageId(dummyDelivery1.getPackageId());
+        Delivery returnedDelivery = deliveryService.getDeliveryByPackageId(dummyDelivery1.getPackageId()).orElse(null);
 
-        assertEquals(listedDummyDelivery1, returnedDeliveries);
+        assertEquals(dummyDelivery1, returnedDelivery);
         verify(deliveryRepository, times(1)).findByPackageId(dummyDelivery1.getPackageId());
     }
 
     @Test
-    void whenGetDeliveryByInvalidPackageId_thenReturnEmptyList() {
+    void whenGetDeliveryByInvalidPackageId_thenReturnReturnNull() {
         Long invalidId = 200L;
 
-        when(deliveryRepository.findByPackageId(invalidId)).thenReturn(new ArrayList<>());
+        when(deliveryRepository.findByPackageId(invalidId)).thenReturn(Optional.ofNullable(null));
 
-        List<Delivery> returnedDeliveries = deliveryService.getDeliveryByPackageId(invalidId);
+        Delivery returnedDelivery = deliveryService.getDeliveryByPackageId(invalidId).orElse(null);
 
-        assertThat(returnedDeliveries.isEmpty());
+        assertNull(returnedDelivery);
         verify(deliveryRepository, times(1)).findByPackageId(invalidId);
     }
     

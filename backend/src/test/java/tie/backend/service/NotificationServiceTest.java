@@ -59,7 +59,7 @@ class NotificationServiceTest {
     void whenGetNotificationById_thenReturnNotification(){
         when(notificationRepository.findById(dummyNotification1.getId())).thenReturn(Optional.of(dummyNotification1));
         
-        Notification returnedNotifcation = notificationService.getNotificationById(dummyNotification1.getId());
+        Notification returnedNotifcation = notificationService.getNotificationById(dummyNotification1.getId()).orElse(null);
         
         assertEquals(dummyNotification1, returnedNotifcation);
         verify(notificationRepository, times(1)).findById(dummyNotification1.getId());
@@ -71,7 +71,7 @@ class NotificationServiceTest {
 
         when(notificationRepository.findById(id)).thenReturn(Optional.ofNullable(null));
         
-        Notification returnedNotifcation = notificationService.getNotificationById(id);
+        Notification returnedNotifcation = notificationService.getNotificationById(id).orElse(null);
         
         assertNull(returnedNotifcation);
         verify(notificationRepository, times(1)).findById(id);

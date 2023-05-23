@@ -1,6 +1,5 @@
 package tie.backend.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
@@ -8,7 +7,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,7 +57,7 @@ class CompanyServiceTest {
     void whenGetCompanyById_thenReturnCompany() {
         when(companyRepository.findById(dummyCompany1.getId())).thenReturn(Optional.of(dummyCompany1));
 
-        Company returnedCompany = companyService.getCompanyById(dummyCompany1.getId());
+        Company returnedCompany = companyService.getCompanyById(dummyCompany1.getId()).orElse(null);
 
         assertEquals(dummyCompany1, returnedCompany);
         verify(companyRepository, times(1)).findById(dummyCompany1.getId());
@@ -71,7 +69,7 @@ class CompanyServiceTest {
 
         when(companyRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
-        Company returnedCompany = companyService.getCompanyById(id);
+        Company returnedCompany = companyService.getCompanyById(id).orElse(null);
 
         assertNull(returnedCompany);
         verify(companyRepository, times(1)).findById(id);
@@ -79,24 +77,23 @@ class CompanyServiceTest {
 
     @Test
     void whenGetCompanyByName_thenReturnCompanies() {
-        List<Company> listedDummyCompany1 = new ArrayList<Company>(Arrays.asList(dummyCompany1));
-        when(companyRepository.findByName(dummyCompany1.getName())).thenReturn(listedDummyCompany1);
+        when(companyRepository.findByName(dummyCompany1.getName())).thenReturn(Optional.of(dummyCompany1));
 
-        List<Company> returnedCompanies = companyService.getCompanyByName(dummyCompany1.getName());
+        Company returnedCompany = companyService.getCompanyByName(dummyCompany1.getName()).orElse(null);
 
-        assertEquals(listedDummyCompany1, returnedCompanies);
+        assertEquals(dummyCompany1, returnedCompany);
         verify(companyRepository, times(1)).findByName(dummyCompany1.getName());
     }
 
     @Test
-    void whenGetCompanyByInvalidName_thenReturnEmptyList() {
+    void whenGetCompanyByInvalidName_thenReturnReturnNull() {
         String invalidName = "some email";
 
-        when(companyRepository.findByName(invalidName)).thenReturn(new ArrayList<>());
+        when(companyRepository.findByName(invalidName)).thenReturn(Optional.ofNullable(null));
 
-        List<Company> returnedCompanies = companyService.getCompanyByName(invalidName);
+        Company returnedCompany = companyService.getCompanyByName(invalidName).orElse(null);
 
-        assertThat(returnedCompanies.isEmpty());
+        assertNull(returnedCompany);
         verify(companyRepository, times(1)).findByName(invalidName);
     }
 }

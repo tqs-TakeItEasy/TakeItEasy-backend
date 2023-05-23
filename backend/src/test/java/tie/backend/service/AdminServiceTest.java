@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,7 +61,7 @@ class AdminServiceTest {
     void whenGetAdminById_thenReturnAdmin() {
         when(adminRepository.findById(dummyAdmin1.getId())).thenReturn(Optional.of(dummyAdmin1));
 
-        Admin returnedAdmin = adminService.getAdminById(dummyAdmin1.getId());
+        Admin returnedAdmin = adminService.getAdminById(dummyAdmin1.getId()).orElse(null);
 
         assertEquals(dummyAdmin1, returnedAdmin);
         verify(adminRepository, times(1)).findById(dummyAdmin1.getId());
@@ -74,7 +73,7 @@ class AdminServiceTest {
 
         when(adminRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
-        Admin returnedAdmin = adminService.getAdminById(id);
+        Admin returnedAdmin = adminService.getAdminById(id).orElse(null);
 
         assertNull(returnedAdmin);
         verify(adminRepository, times(1)).findById(id);
@@ -82,24 +81,23 @@ class AdminServiceTest {
 
     @Test
     void whenGetAdminByEmail_thenReturnAdmins() {
-        List<Admin> listedDummyAdmin1 = new ArrayList<Admin>(Arrays.asList(dummyAdmin1));
-        when(adminRepository.findByEmail(dummyAdmin1.getEmail())).thenReturn(listedDummyAdmin1);
+        when(adminRepository.findByEmail(dummyAdmin1.getEmail())).thenReturn(Optional.of(dummyAdmin1));
 
-        List<Admin> returnedAdmins = adminService.getAdminByEmail(dummyAdmin1.getEmail());
+        Admin returnedAdmin = adminService.getAdminByEmail(dummyAdmin1.getEmail()).orElse(null);
 
-        assertEquals(listedDummyAdmin1, returnedAdmins);
+        assertEquals(dummyAdmin1, returnedAdmin);
         verify(adminRepository, times(1)).findByEmail(dummyAdmin1.getEmail());
     }
 
     @Test
-    void whenGetAdminByInvalidEmail_thenReturnEmptyList() {
+    void whenGetAdminByInvalidEmail_thenReturnReturnNull() {
         String invalidEmail = "some email";
 
-        when(adminRepository.findByEmail(invalidEmail)).thenReturn(new ArrayList<>());
+        when(adminRepository.findByEmail(invalidEmail)).thenReturn(Optional.ofNullable(null));
 
-        List<Admin> returnedAdmins = adminService.getAdminByEmail(invalidEmail);
+        Admin returnedAdmin = adminService.getAdminByEmail(invalidEmail).orElse(null);
 
-        assertThat(returnedAdmins.isEmpty());
+        assertNull(returnedAdmin);
         verify(adminRepository, times(1)).findByEmail(invalidEmail);
     }
 

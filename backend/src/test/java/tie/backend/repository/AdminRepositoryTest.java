@@ -64,7 +64,7 @@ class AdminRepositoryTest {
     }
 
     @Test
-    void whenGetAdminByInvalidId_thenReturnNullable(){
+    void whenGetAdminByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         Admin returnedAdmin = adminRepository.findById(invalidId).orElse(null);
 
@@ -74,18 +74,18 @@ class AdminRepositoryTest {
     @Test
     void whenGetAdminByEmail_thenReturnAdmin(){
         testEntityManager.persistAndFlush(dummyAdmin1);
-        List<Admin> dummyAdmin1List = new ArrayList<>(Arrays.asList(dummyAdmin1));
-        List<Admin> returnedAdmins = adminRepository.findByEmail(dummyAdmin1.getEmail());
+
+        Admin returnedAdmin = adminRepository.findByEmail(dummyAdmin1.getEmail()).orElse(null);
         
-        assertEquals(dummyAdmin1List, returnedAdmins);
+        assertEquals(dummyAdmin1, returnedAdmin);
     }
 
     @Test
-    void whenGetAdminByInvalidEmail_thenEmptyList(){
+    void whenGetAdminByInvalidEmail_thenReturnNull(){
         String invalidEmail = "some email";
-        List<Admin> returnedAdmins = adminRepository.findByEmail(invalidEmail);
+        Admin returnedAdmin = adminRepository.findByEmail(invalidEmail).orElse(null);
 
-        assertThat(returnedAdmins.isEmpty());
+        assertNull(returnedAdmin);
     }
 
     @Test

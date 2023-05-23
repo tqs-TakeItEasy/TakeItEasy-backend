@@ -68,7 +68,7 @@ public class DeliveryRepositoryTest {
     }
 
     @Test
-    void whenGetDeliveryByInvalidId_thenReturnNullable(){
+    void whenGetDeliveryByInvalidId_thenReturnNull(){
         Long invalidId = 200L;
         Delivery returnedDelivery = deliveryRepository.findById(invalidId).orElse(null);
 
@@ -78,18 +78,18 @@ public class DeliveryRepositoryTest {
     @Test
     void whenGetDeliveryByPackageId_thenReturnDelivery(){
         testEntityManager.persistAndFlush(dummyDelivery1);
-        List<Delivery> dummyDelivery1List = new ArrayList<>(Arrays.asList(dummyDelivery1));
-        List<Delivery> returnedDeliveries = deliveryRepository.findByPackageId(dummyDelivery1.getPackageId());
         
-        assertEquals(dummyDelivery1List, returnedDeliveries);
+        Delivery returnedDelivery = deliveryRepository.findByPackageId(dummyDelivery1.getPackageId()).orElse(null);
+        
+        assertEquals(dummyDelivery1, returnedDelivery);
     }
 
     @Test
-    void whenGetDeliveryByInvalidPackageId_thenReturnEmptyList(){
+    void whenGetDeliveryByInvalidPackageId_thenReturnReturnNull(){
         Long invalidId = 200L;
-        List<Delivery> returnedDeliveries = deliveryRepository.findByPackageId(invalidId);
+        Delivery returnedDelivery = deliveryRepository.findByPackageId(invalidId).orElse(null);
 
-        assertThat(returnedDeliveries.isEmpty());
+        assertNull(returnedDelivery);
     }
 
     @Test

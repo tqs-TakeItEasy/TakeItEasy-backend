@@ -8,7 +8,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,14 +34,16 @@ class ACPServiceTest {
     private ACP dummyACP1;
     private ACP dummyACP2;
     private Company dummyCompany;
-    private PickupPoint pickupPoint;
+    private PickupPoint dummyPickupPoint;
 
     @BeforeEach
     void setUp() {
         dummyACPs = new ArrayList<ACP>();
+
         dummyCompany = new Company();
-        dummyACP1 = new ACP("nam1", "email1", "pwd1", dummyCompany, pickupPoint);
-        dummyACP2 = new ACP("nam2", "email2", "pwd2", dummyCompany, pickupPoint);
+
+        dummyACP1 = new ACP("nam1", "email1", "pwd1", dummyCompany, dummyPickupPoint);
+        dummyACP2 = new ACP("nam2", "email2", "pwd2", dummyCompany, dummyPickupPoint);
         
         dummyACPs.add(dummyACP1);
         dummyACPs.add(dummyACP2);
@@ -64,7 +65,7 @@ class ACPServiceTest {
     void whenGetACPById_thenReturnACP(){
         when(aCPRepository.findById(dummyACP1.getId())).thenReturn(Optional.of(dummyACP1));
 
-        ACP returnedACP = aCPService.getACPById(dummyACP1.getId());
+        ACP returnedACP = aCPService.getACPById(dummyACP1.getId()).orElse(null);
 
         assertEquals(dummyACP1, returnedACP);
         verify(aCPRepository, times(1)).findById(dummyACP1.getId());
@@ -76,7 +77,7 @@ class ACPServiceTest {
 
         when(aCPRepository.findById(id)).thenReturn(Optional.ofNullable(null));
 
-        ACP returnedACP = aCPService.getACPById(id);
+        ACP returnedACP = aCPService.getACPById(id).orElse(null);
 
         assertNull(returnedACP);
         verify(aCPRepository, times(1)).findById(id);
@@ -84,35 +85,34 @@ class ACPServiceTest {
 
     @Test
     void whenGetACPByEmail_thenReturnACPs(){
-        List<ACP> listedDummyACP1 = new ArrayList<ACP>(Arrays.asList(dummyACP1));
-        when(aCPRepository.findByEmail(dummyACP1.getEmail())).thenReturn(listedDummyACP1);
+        when(aCPRepository.findByEmail(dummyACP1.getEmail())).thenReturn(Optional.of(dummyACP1));
 
-        List<ACP> returnedACPs = aCPService.getACPByEmail(dummyACP1.getEmail());
+        ACP returnedACP = aCPService.getACPByEmail(dummyACP1.getEmail()).orElse(null);
 
-        assertEquals(listedDummyACP1, returnedACPs);
+        assertEquals(dummyACP1, returnedACP);
         verify(aCPRepository, times(1)).findByEmail(dummyACP1.getEmail());
     }
 
     @Test
-    void whenGetACPByInvalidEmail_thenReturnEmptyList(){
+    void whenGetACPByInvalidEmail_thenReturnReturnNull(){
         String invalidEmail = "some email";
 
-        when(aCPRepository.findByEmail(invalidEmail)).thenReturn(new ArrayList<>());
+        when(aCPRepository.findByEmail(invalidEmail)).thenReturn(Optional.ofNullable(null));
 
-        List<ACP> returnedACPs = aCPService.getACPByEmail(invalidEmail);
+        ACP returnedACP = aCPService.getACPByEmail(invalidEmail).orElse(null);
 
-        assertThat(returnedACPs.isEmpty());
+        assertNull(returnedACP);
         verify(aCPRepository, times(1)).findByEmail(invalidEmail);
     }
 
     @Test
     void whenGetACPsByPickupPoint_thenReturnACPs(){
-        when(aCPRepository.findByPickupPoint(pickupPoint)).thenReturn(dummyACPs);
+        when(aCPRepository.findByPickupPoint(dummyPickupPoint)).thenReturn(dummyACPs);
 
-        List<ACP> returnedACPs = aCPService.getACPByPickupPoint(pickupPoint);
+        List<ACP> returnedACPs = aCPService.getACPByPickupPoint(dummyPickupPoint);
 
         assertEquals(dummyACPs, returnedACPs);
-        verify(aCPRepository, times(1)).findByPickupPoint(pickupPoint);
+        verify(aCPRepository, times(1)).findByPickupPoint(dummyPickupPoint);
     }
 
     @Test

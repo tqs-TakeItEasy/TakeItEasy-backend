@@ -21,17 +21,11 @@ public class ACPService {
         return acpRepository.findAll();
     }
 
-    public ACP getACPById(Long id) {
-        Optional<ACP> aCP = acpRepository.findById(id);
-
-        if (aCP.isPresent()){
-            return aCP.get();
-        } else {
-            return null;
-        }
+    public Optional<ACP> getACPById(Long id) {
+        return acpRepository.findById(id);
     }
 
-    public List<ACP> getACPByEmail(String email) {
+    public Optional<ACP> getACPByEmail(String email) {
         return acpRepository.findByEmail(email);
     }
 

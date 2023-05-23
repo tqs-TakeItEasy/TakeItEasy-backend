@@ -17,20 +17,17 @@ public class PickupPointService {
     @Autowired
     private PickupPointRepository pickupPointRepository;
 
-    public PickupPoint addPickupPoint(PickupPoint newPickupPoint) {
-        Optional<PickupPoint> newPickupPointByName = pickupPointRepository.findByName(newPickupPoint.getName());
-        Optional<PickupPoint> newPickupPointByEmail = pickupPointRepository.findByEmail(newPickupPoint.getEmail());
+    public PickupPoint addPickupPoint(PickupPoint pickupPoint) {
+        Optional<PickupPoint> pickupPointByName = pickupPointRepository.findByName(pickupPoint.getName());
+        Optional<PickupPoint> pickupPointByEmail = pickupPointRepository.findByEmail(pickupPoint.getEmail());
 
-        System.out.println(newPickupPointByName);
-        System.out.println(newPickupPointByEmail);
-
-        if (newPickupPointByName.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This Pickup Name already exists");
-        } else if (newPickupPointByEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.OK, "This Pickup Email already exists");
+        if (pickupPointByName.isPresent()){
+            throw new ResponseStatusException(HttpStatus.OK, "This PickupPoint's name already exists");
+        } else if (pickupPointByEmail.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.OK, "This PickupPoint's email already exists");
         } else {
-            pickupPointRepository.save(newPickupPoint);
-            return newPickupPoint;
+            pickupPointRepository.save(pickupPoint);
+            return pickupPoint;
         }
     }
 
@@ -38,24 +35,7 @@ public class PickupPointService {
         return pickupPointRepository.findAll();
     }
 
-    public PickupPoint getPickupPointById(Long id) {
-        Optional<PickupPoint> pickupPoint = pickupPointRepository.findById(id);
-
-        if (pickupPoint.isPresent()){
-            return pickupPoint.get();
-        } else {
-            return null;
-        }
-    }
-
-    public Long getNextId() {
-        long max_id = 0;
-        for (PickupPoint pickupPoint : getAllPickupPoints()) {
-            long id = pickupPoint.getId();
-            if (id > max_id) {
-                max_id = id;
-            }
-        }
-        return max_id+1;
+    public Optional<PickupPoint> getPickupPointById(Long id) {
+        return pickupPointRepository.findById(id);
     }
 }

@@ -1,5 +1,6 @@
 package tie.backend.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.times;
@@ -20,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
+import tie.backend.model.PickupPointStatus;
 import tie.backend.repository.PickupPointRepository;
 
 class PickupPointServiceTest {
@@ -80,6 +82,25 @@ class PickupPointServiceTest {
         verify(pickupPointRepository, times(1)).findById(id);
     }
 
+    @Test
+    void whenGetPickupPointsByStatus_thenReturnPickupPoint() {
+        when(pickupPointRepository.findByStatus(dummyPickupPoint1.getStatus())).thenReturn(dummyPickupPoints);
+
+        List<PickupPoint> returnedPickupPoints = pickupPointService.getPickupPointsByStatus(dummyPickupPoint1.getStatus());
+
+        assertEquals(dummyPickupPoints, returnedPickupPoints);
+        verify(pickupPointRepository, times(1)).findByStatus(dummyPickupPoint1.getStatus());
+    }
+
+    @Test
+    void whenGetPickupPointsByInvalidStatus_thenReturnNull() {
+        when(pickupPointRepository.findByStatus(PickupPointStatus.UNAVAILABLE)).thenReturn(new ArrayList<>());
+
+        List<PickupPoint> returnedPickupPoints = pickupPointService.getPickupPointsByStatus(PickupPointStatus.UNAVAILABLE);
+
+        assertThat(returnedPickupPoints.isEmpty());
+        verify(pickupPointRepository, times(1)).findByStatus(PickupPointStatus.UNAVAILABLE);
+    }
 
     @Test
     void WhenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){

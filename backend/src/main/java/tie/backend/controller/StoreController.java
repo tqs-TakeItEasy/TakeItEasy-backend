@@ -45,7 +45,7 @@ public class StoreController {
         return ResponseEntity.noContent().build();
     }
 
-    // POST - Add New Pickup Point
+    // POST - NEW STORE
     @PostMapping("add/")
     public ResponseEntity<Store> addStore(@RequestBody Store pickupPoint) {
         Store newStore = storeService.addStore(pickupPoint);

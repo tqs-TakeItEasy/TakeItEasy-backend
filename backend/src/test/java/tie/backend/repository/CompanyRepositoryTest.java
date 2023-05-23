@@ -80,4 +80,21 @@ class CompanyRepositoryTest {
 
         assertNull(returnedCompany);
     }
+
+    @Test
+    void whenGetCompanyByEmail_thenReturnCompany(){
+        testEntityManager.persistAndFlush(dummyCompany1);
+
+        Company returnedCompany = companyRepository.findByEmail(dummyCompany1.getEmail()).orElse(null);
+        
+        assertEquals(dummyCompany1, returnedCompany);
+    }
+
+    @Test
+    void whenGetCompanyByInvalidEmail_thenEmptyList(){
+        String invalidName = "some email";
+        Company returnedCompany = companyRepository.findByEmail(invalidName).orElse(null);
+
+        assertNull(returnedCompany);
+    }
 }

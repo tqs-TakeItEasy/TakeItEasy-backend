@@ -10,11 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.repository.CompanyRepository;
@@ -95,5 +97,35 @@ class CompanyServiceTest {
 
         assertNull(returnedCompany);
         verify(companyRepository, times(1)).findByName(invalidName);
+    }
+
+    @Test
+    void WhenAddInvalidCompanyName_ThenReturnInvalidName(){
+        when(companyRepository.findByName(dummyCompany1.getName())).thenReturn(Optional.of(dummyCompany1));
+        when(companyRepository.findByEmail(dummyCompany1.getEmail())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            companyService.addCompany(dummyCompany1);
+        });
+        Assertions.assertEquals("This Company's name already exists", exception.getReason());
+
+        verify(companyRepository, times(1)).findByName(dummyCompany1.getName());
+        verify(companyRepository, times(1)).findByEmail(dummyCompany1.getEmail());
+        verify(companyRepository, times(0)).save(dummyCompany1);
+    }
+
+    @Test
+    void WhenAddInvalidCompanyEmail_ThenReturnInvalidEmail(){
+        when(companyRepository.findByName(dummyCompany1.getName())).thenReturn(Optional.empty());
+        when(companyRepository.findByEmail(dummyCompany1.getEmail())).thenReturn(Optional.of(dummyCompany1));
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            companyService.addCompany(dummyCompany1);
+        });
+        Assertions.assertEquals("This Company's email already exists", exception.getReason());
+
+        verify(companyRepository, times(1)).findByName(dummyCompany1.getName());
+        verify(companyRepository, times(1)).findByEmail(dummyCompany1.getEmail());
+        verify(companyRepository, times(0)).save(dummyCompany1);
     }
 }

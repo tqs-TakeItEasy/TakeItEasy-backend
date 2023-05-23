@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.repository.CompanyRepository;
@@ -27,7 +29,7 @@ public class CompanyService {
         return companyRepository.findByName(name);
     }
 
-    public Object addCompany(Company dummyCompany1) {
-        return null;
+    public Company addCompany(Company company) {
+        
     }
 }

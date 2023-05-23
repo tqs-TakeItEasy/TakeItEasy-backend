@@ -1,16 +1,11 @@
-package tie.backend.Controller;
+package tie.backend.controller;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
-import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
-
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})

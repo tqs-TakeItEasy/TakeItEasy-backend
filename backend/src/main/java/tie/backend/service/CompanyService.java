@@ -30,6 +30,16 @@ public class CompanyService {
     }
 
     public Company addCompany(Company company) {
-        
+        Optional<Company> companyByName = companyRepository.findByName(company.getName());
+        Optional<Company> companyByEmail = companyRepository.findByEmail(company.getEmail());
+
+        if (companyByName.isPresent()){
+            throw new ResponseStatusException(HttpStatus.OK, "This Company's name already exists");
+        } else if (companyByEmail.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.OK, "This Company's email already exists");
+        } else {
+            companyRepository.save(company);
+            return company;
+        }
     }
 }

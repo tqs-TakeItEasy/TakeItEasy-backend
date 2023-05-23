@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,9 +27,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.Store;
-import tie.backend.service.CompanyService;
 import tie.backend.service.StoreService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -41,9 +42,6 @@ class StoreControllerTest {
 
     @MockBean
     private StoreService storeService;
-
-    @MockBean
-    private CompanyService companyService;
 
     private List<Store> dummyStores;
     private Company dummyCompany1;
@@ -75,13 +73,14 @@ class StoreControllerTest {
         
         when(storeService.getAllStores()).thenReturn(dummyStores);
 
-        mvc.perform(get("/api/v1/stores/").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(equalTo(3))))
-                .andExpect(jsonPath("$[0].name", is(dummyCompany1.getName())))
-                .andExpect(jsonPath("$[1].name", is(dummyCompany2.getName())))
-                .andExpect(jsonPath("$[2].name", is(dummyCompany3.getName())))
+        mvc.perform(get("/api/v1/stores/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$", hasSize(equalTo(3))))
+            .andExpect(jsonPath("$[0].name", is(dummyCompany1.getName())))
+            .andExpect(jsonPath("$[1].name", is(dummyCompany2.getName())))
+            .andExpect(jsonPath("$[2].name", is(dummyCompany3.getName())))
         ;
 
         verify(storeService, times(1)).getAllStores();
@@ -95,7 +94,8 @@ class StoreControllerTest {
         
         when(storeService.getStoreById(dummyStore1.getId())).thenReturn(Optional.of(dummyStore1));
 
-        mvc.perform(get("/api/v1/stores/store/" + Long.toString(id) + "/").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(get("/api/v1/stores/store/" + Long.toString(id) + "/")
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(jsonPath("$.id", is(dummyStore1.getId().intValue())))
@@ -111,14 +111,13 @@ class StoreControllerTest {
 
         when(storeService.addStore(dummyStore1)).thenReturn(dummyStore1);
 
-        // mvc.perform(post("/api/v1/stores/add/")
-        //         .contentType(MediaType.APPLICATION_JSON)
-        //         .content(JsonUtils.toJson(dummyStore1)))
-        //         .andDo(print())
-        //         .andExpect(status().isOk())
-        //         .andExpect(jsonPath("$.name").value(dummyStore1.getName()))
-        //         .andExpect(jsonPath("$.email").value(dummyStore1.getEmail()));
+        mvc.perform(post("/api/v1/stores/add/")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(JsonUtils.toJson(dummyStore1)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value(dummyStore1.getName()))
+            .andExpect(jsonPath("$.email").value(dummyStore1.getEmail()));
 
-        // verify(storeService, times(1)).addStore(dummyStore1);
+        verify(storeService, times(1)).addStore(dummyStore1);
     }
 }

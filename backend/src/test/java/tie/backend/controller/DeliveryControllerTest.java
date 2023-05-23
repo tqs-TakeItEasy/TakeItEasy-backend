@@ -64,6 +64,10 @@ class DeliveryControllerTest {
     void setUp() {
         dummyDeliveries = new ArrayList<>();
         
+        dummyCompany1 = new Company("name1", "email1");
+        dummyCompany2 = new Company("name2", "email2");
+        dummyCompany3 = new Company("name3", "email3");
+        
         dummyPickupPoint1 = new PickupPoint("name1", "address1", "email1", dummyCompany1);
         dummyPickupPoint2 = new PickupPoint("name2", "address2", "email2", dummyCompany2);
         dummyPickupPoint3 = new PickupPoint("name3", "address3", "email3", dummyCompany3);
@@ -84,13 +88,14 @@ class DeliveryControllerTest {
         
         when(deliveryService.getAllDeliveries()).thenReturn(dummyDeliveries);
 
-        mvc.perform(get("/api/v1/dummyDeliveries/").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$", hasSize(equalTo(3))))
-                .andExpect(jsonPath("$[0].userName", is(dummyDelivery1.getUserName())))
-                .andExpect(jsonPath("$[1].userName", is(dummyDelivery2.getUserName())))
-                .andExpect(jsonPath("$[2].userName", is(dummyDelivery3.getUserName())))
+        mvc.perform(get("/api/v1/deliveries/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$", hasSize(equalTo(3))))
+            .andExpect(jsonPath("$[0].userName", is(dummyDelivery1.getUserName())))
+            .andExpect(jsonPath("$[1].userName", is(dummyDelivery2.getUserName())))
+            .andExpect(jsonPath("$[2].userName", is(dummyDelivery3.getUserName())))
         ;
 
         verify(deliveryService, times(1)).getAllDeliveries();
@@ -104,12 +109,13 @@ class DeliveryControllerTest {
         
         when(deliveryService.getDeliveryById(dummyDelivery1.getId())).thenReturn(Optional.of(dummyDelivery1));
 
-        mvc.perform(get("/api/v1/dummyDeliveries/delivery/" + Long.toString(id) + "/").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$.id", is(dummyDelivery1.getId().intValue())))
-                .andExpect(jsonPath("$.userName", is(dummyDelivery1.getUserName())))
-                .andExpect(jsonPath("$.userEmail", is(dummyDelivery1.getUserEmail())))
+        mvc.perform(get("/api/v1/deliveries/delivery/" + Long.toString(id) + "/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$.id", is(dummyDelivery1.getId().intValue())))
+            .andExpect(jsonPath("$.userName", is(dummyDelivery1.getUserName())))
+            .andExpect(jsonPath("$.userEmail", is(dummyDelivery1.getUserEmail())))
         ;
 
         verify(deliveryService, times(1)).getDeliveryById(dummyDelivery1.getId());
@@ -126,12 +132,13 @@ class DeliveryControllerTest {
         when(pickupPointService.getPickupPointById(dummyDelivery1.getPickupPoint().getId())).thenReturn(Optional.of(dummyDelivery1.getPickupPoint()));
         when(deliveryService.getDeliveriesByPickupPoint(dummyDelivery1.getPickupPoint())).thenReturn(dummyDeliveries);
 
-        mvc.perform(get("/api/v1/dummyDeliveries/point/" + Long.toString(id) + "/").contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(jsonPath("$[0].userName", is(dummyDelivery1.getUserName())))
-                .andExpect(jsonPath("$[0].userEmail", is(dummyDelivery1.getUserEmail())))
-                .andExpect(jsonPath("$[0].packageId", is(dummyDelivery1.getPackageId().intValue())))
+        mvc.perform(get("/api/v1/deliveries/point/" + Long.toString(id) + "/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$[0].userName", is(dummyDelivery1.getUserName())))
+            .andExpect(jsonPath("$[0].userEmail", is(dummyDelivery1.getUserEmail())))
+            .andExpect(jsonPath("$[0].packageId", is(dummyDelivery1.getPackageId().intValue())))
         ;
 
         verify(pickupPointService, times(1)).getPickupPointById(dummyDelivery1.getPickupPoint().getId());

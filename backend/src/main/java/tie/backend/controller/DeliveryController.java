@@ -70,7 +70,7 @@ public class DeliveryController{
     // PUT - UPDATE DELIVERY STATUS
 
     @PutMapping("updateStatus/")
-    public ResponseEntity<Delivery> updateGuard(@Valid @RequestBody Delivery deliveryDetails) throws ResourceNotFoundException {
+    public ResponseEntity<Delivery> updateDeliveryStatus(@Valid @RequestBody Delivery deliveryDetails) throws ResourceNotFoundException {
         return ResponseEntity.ok(deliveryService.updateDeliveryStatus(deliveryDetails));
     }
 }

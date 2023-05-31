@@ -35,6 +35,8 @@ class ACPRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        acpRepository.deleteAll();
+
         dummyACPs = new ArrayList<>();
 
         dummyCompany = new Company();

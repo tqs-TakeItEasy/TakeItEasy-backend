@@ -33,6 +33,8 @@ class AdminRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        adminRepository.deleteAll();
+
         dummyAdmins = new ArrayList<>();
         dummyCompany = new Company();
         dummyAdmin1 = new Admin("name1", "email1", "pwd1", dummyCompany);

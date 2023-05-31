@@ -31,7 +31,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.Delivery;
-import tie.backend.model.DeliveryStatus;
 import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
 import tie.backend.service.DeliveryService;
@@ -88,7 +87,7 @@ class DeliveryControllerTest {
         dummyDeliveries.add(dummyDelivery2);
         dummyDeliveries.add(dummyDelivery3);
 
-        dummyDelivery1_5.setStatus(DeliveryStatus.RECIEVED);
+        dummyDelivery1_5.setStatus("RECIEVED");
     }
 
     @Test

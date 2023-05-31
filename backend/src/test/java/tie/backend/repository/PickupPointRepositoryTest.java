@@ -15,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
-import tie.backend.model.PickupPointStatus;
 
 @DataJpaTest
 class PickupPointRepositoryTest {
@@ -34,6 +33,8 @@ class PickupPointRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        pickupPointRepository.deleteAll();
+
         dummyPickupPoints = new ArrayList<>();
 
         dummyCompany1 = new Company("name1", "email1");
@@ -88,7 +89,7 @@ class PickupPointRepositoryTest {
 
     @Test
     void whenGetCompanyByInvalidEmail_thenEmptyList(){
-        PickupPointStatus invalid = PickupPointStatus.UNAVAILABLE;
+        String invalid = "UNAVAILABLE";
 
         List<PickupPoint> returnedPickupPoints = pickupPointRepository.findByStatus(invalid);
 

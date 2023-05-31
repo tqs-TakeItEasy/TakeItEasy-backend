@@ -21,7 +21,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
-import tie.backend.model.PickupPointStatus;
 import tie.backend.repository.PickupPointRepository;
 
 class PickupPointServiceTest {
@@ -94,12 +93,12 @@ class PickupPointServiceTest {
 
     @Test
     void whenGetPickupPointsByInvalidStatus_thenReturnNull() {
-        when(pickupPointRepository.findByStatus(PickupPointStatus.UNAVAILABLE)).thenReturn(new ArrayList<>());
+        when(pickupPointRepository.findByStatus("UNAVAILABLE")).thenReturn(new ArrayList<>());
 
-        List<PickupPoint> returnedPickupPoints = pickupPointService.getPickupPointsByStatus(PickupPointStatus.UNAVAILABLE);
+        List<PickupPoint> returnedPickupPoints = pickupPointService.getPickupPointsByStatus("UNAVAILABLE");
 
         assertThat(returnedPickupPoints).isEmpty();
-        verify(pickupPointRepository, times(1)).findByStatus(PickupPointStatus.UNAVAILABLE);
+        verify(pickupPointRepository, times(1)).findByStatus("UNAVAILABLE");
     }
 
     @Test

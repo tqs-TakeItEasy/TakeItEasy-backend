@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import tie.backend.exceptions.ResourceNotFoundException;
+import tie.backend.exception.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.service.DeliveryService;
@@ -51,12 +51,12 @@ public class DeliveryController{
     }
 
     // GET - Deliveries By Pickup Point Identifier
-    @GetMapping("point/{pickupPointId}/")
-    public ResponseEntity<List<Delivery>> getDeliveriesByPickupPointId(@PathVariable(value="pickupPointId") String pickupPointId) {
-        if (!pickupPointId.matches("\\d+")){
+    @GetMapping("point/{pickup_point_id}/")
+    public ResponseEntity<List<Delivery>> getDeliveriesByPickupPointId(@PathVariable(value="pickup_point_id") String pickup_point_id) {
+        if (!pickup_point_id.matches("\\d+")){
             return ResponseEntity.badRequest().build();
         }
-        Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(Long.parseLong(pickupPointId));
+        Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(Long.parseLong(pickup_point_id));
         if(pickupPoint.isPresent()){
             List<Delivery> deliveries = deliveryService.getDeliveriesByPickupPoint(pickupPoint.get());
             return ResponseEntity.ok().body(deliveries);

@@ -11,7 +11,8 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "company")
-public class Company {
+// @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
+public class Company{
 
     // TABLE
     
@@ -22,7 +23,7 @@ public class Company {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "email", unique = true)
+    @Column(name = "email")
     private String email;
 
     // CONSTRUCTORS
@@ -83,7 +84,7 @@ public class Company {
         return  "{" +
                 "id='" + getId() + "', " +
                 "name='" + getName() + "', " +
-                "email='" + getName() + "', " +
+                "email='" + getEmail() + "', " +
                 "}";
     }
 }

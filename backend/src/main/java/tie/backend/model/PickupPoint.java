@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -35,9 +34,9 @@ public class PickupPoint {
     private String email;
 
     @Column(name = "status")
-    private PickupPointStatus status;
+    private String status;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
@@ -49,7 +48,7 @@ public class PickupPoint {
         this.name = name;
         this.address = address;
         this.email = email;
-        this.status = PickupPointStatus.AVAILABLE;
+        this.status = "AVAILABLE";
         this.company = company;
     }
 
@@ -70,7 +69,7 @@ public class PickupPoint {
     public String getName() {
         return name;
     }
-    public PickupPointStatus getStatus() {
+    public String getStatus() {
         return status;
     }
 
@@ -91,7 +90,8 @@ public class PickupPoint {
     public void setName(String name) {
         this.name = name;
     }
-    public void setStatus(PickupPointStatus status) {
+    public void setStatus(String
+     status) {
         this.status = status;
     }
 

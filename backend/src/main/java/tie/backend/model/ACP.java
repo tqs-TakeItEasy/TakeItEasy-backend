@@ -7,7 +7,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -34,12 +33,12 @@ public class ACP {
     @Column(name = "pwd")
     private String pwd;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "pickup_point_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PickupPoint pickupPoint;

@@ -33,6 +33,8 @@ class StoreRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        storeRepository.deleteAll();
+
         dummyStores = new ArrayList<>();
         dummyCompany = new Company();
         dummyStore1 = new Store();

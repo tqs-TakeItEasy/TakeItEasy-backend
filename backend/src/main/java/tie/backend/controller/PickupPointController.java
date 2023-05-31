@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tie.backend.model.PickupPoint;
-import tie.backend.model.PickupPointStatus;
 import tie.backend.service.PickupPointService;
 
 @RestController
@@ -40,8 +39,7 @@ public class PickupPointController {
     @GetMapping("/status/{status}/")
     public ResponseEntity<List<PickupPoint>> getPickupPointsByStatus(@PathVariable(value="status") String status) {
         try {
-            PickupPointStatus pickupPointStatus = PickupPointStatus.valueOf(status);
-            List<PickupPoint> pickupPoints = pickupPointService.getPickupPointsByStatus(pickupPointStatus);
+            List<PickupPoint> pickupPoints = pickupPointService.getPickupPointsByStatus(status);
             return ResponseEntity.ok().body(pickupPoints);
         } catch(IllegalArgumentException exception) {
             return ResponseEntity.badRequest().build();

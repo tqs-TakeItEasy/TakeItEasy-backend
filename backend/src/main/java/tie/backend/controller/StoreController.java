@@ -38,11 +38,11 @@ public class StoreController {
 
     // GET - Store by Identifier
     @GetMapping("store/{store_id}/")
-    public ResponseEntity<Store> getStoreById(@PathVariable(value="store_id") String storeId) {
-        if (!storeId.matches("\\d+")){
+    public ResponseEntity<Store> getStoreById(@PathVariable(value="store_id") String store_id) {
+        if (!store_id.matches("\\d+")){
             return ResponseEntity.badRequest().build();
         }
-        Optional<Store> store = storeService.getStoreById(Long.valueOf(storeId));
+        Optional<Store> store = storeService.getStoreById(Long.valueOf(store_id));
         if(store.isPresent()){
             return ResponseEntity.ok().body(store.get());
         }

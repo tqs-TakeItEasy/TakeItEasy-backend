@@ -6,8 +6,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -28,10 +27,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.config.JsonUtils;
-import tie.backend.model.Company;
-import tie.backend.model.Delivery;
-import tie.backend.model.PickupPoint;
-import tie.backend.model.Store;
+import tie.backend.model.*;
 import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
 
@@ -55,6 +51,7 @@ class DeliveryControllerTest {
     private Company dummyCompany2;
     private Company dummyCompany3;
     private Delivery dummyDelivery1;
+    private Delivery dummyDelivery1_5;
     private Delivery dummyDelivery2;
     private Delivery dummyDelivery3;
     private PickupPoint dummyPickupPoint1;
@@ -76,13 +73,16 @@ class DeliveryControllerTest {
         
         dummyStore = new Store();
 
-        dummyDelivery1 = new Delivery("userName1", "userEmail1", 10L, dummyPickupPoint1, dummyStore); 
+        dummyDelivery1 = new Delivery("userName1", "userEmail1", 10L, dummyPickupPoint1, dummyStore);
+        dummyDelivery1_5 = new Delivery("userName1", "userEmail1", 10L, dummyPickupPoint1, dummyStore);
         dummyDelivery2 = new Delivery("userName2", "userEmail2", 20L, dummyPickupPoint2, dummyStore);
         dummyDelivery3 = new Delivery("userName3", "userEmail1", 30L, dummyPickupPoint3, dummyStore);
 
         dummyDeliveries.add(dummyDelivery1);
         dummyDeliveries.add(dummyDelivery2);
         dummyDeliveries.add(dummyDelivery3);
+
+        dummyDelivery1_5.setStatus(DeliveryStatus.RECIEVED);
     }
 
     @Test
@@ -160,5 +160,17 @@ class DeliveryControllerTest {
 
         verify(deliveryService, times(1)).addDelivery(dummyDelivery1);
     }
-   
+    @Test
+    void whenUpdateDeliveryStatus_thenReturnDelivery() throws Exception {
+        when(deliveryService.updateDeliveryStatus(dummyDelivery1_5)).thenReturn(dummyDelivery1_5);
+
+        mvc.perform(put("/api/v1/deliveries/updateStatus/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.toJson(dummyDelivery1_5)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.packageId").value(dummyDelivery1_5.getPackageId().intValue()))
+                .andExpect(jsonPath("$.status").value(dummyDelivery1_5.getStatus().toString()));
+
+        verify(deliveryService, times(1)).updateDeliveryStatus(dummyDelivery1_5);
+    }
 }

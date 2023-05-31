@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import tie.backend.Exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
+
+import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
@@ -64,4 +67,10 @@ public class DeliveryController{
         return ResponseEntity.ok().body(newDelivery);
     }
 
+    // PUT - UPDATE DELIVERY STATUS
+
+    @PutMapping("updateStatus/")
+    public ResponseEntity<Delivery> updateGuard(@Valid @RequestBody Delivery deliveryDetails) throws ResourceNotFoundException {
+        return ResponseEntity.ok(deliveryService.updateDeliveryStatus(deliveryDetails));
+    }
 }

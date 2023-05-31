@@ -17,7 +17,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import tie.backend.Exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
+import tie.backend.model.DeliveryStatus;
 import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
 import tie.backend.repository.DeliveryRepository;
@@ -32,6 +34,7 @@ class DeliveryServiceTest {
 
     private List<Delivery> dummyDeliveries;
     private Delivery dummyDelivery1;
+    private Delivery dummyDelivery1_5;
     private Delivery dummyDelivery2;
     private PickupPoint dummyPickupPoint;
     private Store dummyStore;
@@ -43,11 +46,14 @@ class DeliveryServiceTest {
         dummyStore = new Store();
 
         dummyDelivery1 = new Delivery("user1", "email1", 22L, dummyPickupPoint, dummyStore);
+        dummyDelivery1_5 = new Delivery("user1", "email1", 22L, dummyPickupPoint, dummyStore);
         dummyDelivery2 = new Delivery("user2", "email2", 24L, dummyPickupPoint, dummyStore);
         
         dummyDeliveries.add(dummyDelivery1);
         dummyDeliveries.add(dummyDelivery2);
-        
+
+        dummyDelivery1_5.setStatus(DeliveryStatus.RECIEVED);
+
         MockitoAnnotations.openMocks(this);
     }
 
@@ -145,5 +151,30 @@ class DeliveryServiceTest {
 
         assertThat(returnedDeliveries.isEmpty());
         verify(deliveryRepository, times(1)).findByStore(invalidStore);
+    }
+
+    @Test
+    void whenAddDeliveryByValidPackageID_thenReturnDelivery() throws ResourceNotFoundException {
+        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.of(dummyDelivery1));
+
+        Delivery newDelivery = deliveryService.addDelivery(dummyDelivery1);
+
+        assertEquals(dummyDelivery1, newDelivery);
+
+        verify(deliveryRepository, times(1)).findByPackageId(dummyDelivery1.getPackageId());
+
+    }
+
+    @Test
+    void whenUpdateDeliveryByValidID_thenReturnDelivery() throws ResourceNotFoundException {
+        when(deliveryRepository.findById(dummyDelivery1_5.getId())).thenReturn(Optional.of(dummyDelivery1));
+
+        Delivery updatedDelivery = deliveryService.updateDeliveryStatus(dummyDelivery1_5);
+
+        assertEquals(dummyDelivery1.getPackageId(), updatedDelivery.getPackageId());
+        assertEquals(dummyDelivery1_5.getStatus(), updatedDelivery.getStatus());
+
+        verify(deliveryRepository, times(1)).findById(dummyDelivery1_5.getId());
+
     }
 }

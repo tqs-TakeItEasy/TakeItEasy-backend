@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import org.springframework.web.server.ResponseStatusException;
+import tie.backend.Exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
@@ -47,6 +48,19 @@ public class DeliveryService {
         } else {
             repository.save(delivery);
             return delivery;
+        }
+    }
+
+    public Delivery updateDeliveryStatus(Delivery delivery) throws ResourceNotFoundException {
+       Delivery existingDelivery = repository.findById(delivery.getId()).orElseThrow(() -> new ResourceNotFoundException("Resource Not Found!"));
+
+        if (existingDelivery != null){
+            existingDelivery.setStatus(delivery.getStatus());
+            repository.save(existingDelivery);
+            return existingDelivery;
+        } else {
+            throw new ResponseStatusException(HttpStatus.OK, "This Delivery does not exist!");
+
         }
     }
 }

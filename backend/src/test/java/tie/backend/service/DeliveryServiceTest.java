@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import org.springframework.web.server.ResponseStatusException;
-import tie.backend.Exceptions.ResourceNotFoundException;
+import tie.backend.exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.DeliveryStatus;
 import tie.backend.model.PickupPoint;

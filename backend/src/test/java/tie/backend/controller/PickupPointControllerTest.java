@@ -1,6 +1,8 @@
 package tie.backend.controller;
 
-
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -64,6 +66,24 @@ class PickupPointControllerTest {
         dummyPickupPoints.add(dummyPickupPoint1);
         dummyPickupPoints.add(dummyPickupPoint2);
         dummyPickupPoints.add(dummyPickupPoint3);
+    }
+
+    @Test
+    void whenGetAllPickupPoints_thenReturnPickupPointsList() throws Exception{
+        
+        when(pickupPointService.getAllPickupPoints()).thenReturn(dummyPickupPoints);
+
+        mvc.perform(get("/api/v1/pickuppoints/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(jsonPath("$", hasSize(equalTo(3))))
+            .andExpect(jsonPath("$[0].name", is(dummyPickupPoint1.getName())))
+            .andExpect(jsonPath("$[1].name", is(dummyPickupPoint2.getName())))
+            .andExpect(jsonPath("$[2].name", is(dummyPickupPoint3.getName())))
+        ;
+
+        verify(pickupPointService, times(1)).getAllPickupPoints();
     }
 
     @Test

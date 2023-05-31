@@ -25,6 +25,13 @@ public class PickupPointController {
     @Autowired
     PickupPointService pickupPointService;
 
+    // GET - ALL PICKUP POINTS
+    @GetMapping("")
+    public ResponseEntity<List<PickupPoint>> getAllDeliveries() {
+        List<PickupPoint> pickupPoints = pickupPointService.getAllPickupPoints();
+        return ResponseEntity.ok().body(pickupPoints);
+    }
+
     // GET - PICKUP POINT BY STATUS
     @GetMapping("/status/{status}/")
     public ResponseEntity<List<PickupPoint>> getPickupPointsByStatus(@PathVariable(value="status") String status) {

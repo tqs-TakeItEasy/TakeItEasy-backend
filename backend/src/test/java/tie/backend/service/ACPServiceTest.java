@@ -123,7 +123,7 @@ class ACPServiceTest {
 
         List<ACP> returnedACPs = aCPService.getACPByPickupPoint(invalidPickupPoint);
 
-        assertThat(returnedACPs.isEmpty());
+        assertThat(returnedACPs.isEmpty()).isTrue();
         verify(aCPRepository, times(1)).findByPickupPoint(invalidPickupPoint);
     }
 
@@ -145,7 +145,7 @@ class ACPServiceTest {
 
         List<ACP> returnedACPs = aCPService.getACPByCompany(company);
 
-        assertThat(returnedACPs.isEmpty());
+        assertThat(returnedACPs.isEmpty()).isTrue();
         verify(aCPRepository, times(1)).findByCompany(company);
     }
 }

@@ -105,6 +105,6 @@ class StoreRepositoryTest {
 
         List<Store> returnedStores = storeRepository.findByCompany(company);
 
-        assertThat(returnedStores.isEmpty());
+        assertThat(returnedStores.isEmpty()).isTrue();
     }
 }

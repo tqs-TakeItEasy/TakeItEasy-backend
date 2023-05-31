@@ -95,4 +95,14 @@ class PickupPointRepositoryTest {
 
         assertThat(returnedPickupPoints).isEmpty();
     }
+
+    @Test
+    void whenDeletePickupPoint_thenDeletePickupPoint(){
+        List<PickupPoint> pickupPoints = pickupPointRepository.findAll();
+
+        testEntityManager.persistAndFlush(dummyPickupPoint1);
+        pickupPointRepository.delete(dummyPickupPoint1);
+
+        assertEquals(pickupPoints, pickupPointRepository.findAll());
+    }
 }

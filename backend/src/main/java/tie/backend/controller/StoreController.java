@@ -18,7 +18,7 @@ import tie.backend.model.Store;
 import tie.backend.service.StoreService;
 
 @RestController
-@CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
+@CrossOrigin
 @RequestMapping("/api/v1/stores/")
 public class StoreController {
     

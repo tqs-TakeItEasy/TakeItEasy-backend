@@ -18,7 +18,7 @@ import tie.backend.model.PickupPointStatus;
 import tie.backend.service.PickupPointService;
 
 @RestController
-@CrossOrigin(origins={"http://localhost:3000", "http://127.0.0.1:3000"})
+@CrossOrigin
 @RequestMapping("/api/v1/pickuppoints/")
 public class PickupPointController {
 

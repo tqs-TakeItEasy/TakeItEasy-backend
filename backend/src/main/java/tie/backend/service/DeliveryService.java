@@ -4,8 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import org.springframework.web.server.ResponseStatusException;
+import tie.backend.Exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
@@ -37,4 +40,22 @@ public class DeliveryService {
         return repository.findByStore(store);
     }
 
+    public Delivery addDelivery(Delivery delivery) {
+        Optional<Delivery> pickupPointByName = repository.findByPackageId(delivery.getPackageId());
+
+        if (pickupPointByName.isPresent()){
+            throw new ResponseStatusException(HttpStatus.OK, "This Delivery's Package ID already exists");
+        } else {
+            repository.save(delivery);
+            return delivery;
+        }
+    }
+
+    public Delivery updateDeliveryStatus(Delivery delivery) throws ResourceNotFoundException {
+       Delivery existingDelivery = repository.findById(delivery.getId()).orElseThrow(() -> new ResourceNotFoundException("This Delivery does not exist!"));
+
+       existingDelivery.setStatus(delivery.getStatus());
+       repository.save(existingDelivery);
+       return existingDelivery;
+    }
 }

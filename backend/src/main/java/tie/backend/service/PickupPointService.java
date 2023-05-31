@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import org.springframework.web.server.ResponseStatusException;
 import tie.backend.model.PickupPoint;
-import tie.backend.model.PickupPointStatus;
 import tie.backend.repository.PickupPointRepository;
 
 @Service
@@ -40,7 +39,7 @@ public class PickupPointService {
         return pickupPointRepository.findById(id);
     }
 
-    public List<PickupPoint> getPickupPointsByStatus(PickupPointStatus pickupPointStatus) {
-        return pickupPointRepository.findByStatus(pickupPointStatus);
+    public List<PickupPoint> getPickupPointsByStatus(String status) {
+        return pickupPointRepository.findByStatus(status);
     }
 }

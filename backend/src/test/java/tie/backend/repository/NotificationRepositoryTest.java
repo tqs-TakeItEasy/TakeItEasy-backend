@@ -31,6 +31,8 @@ class NotificationRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        notificationRepository.deleteAll();
+
         dummyNotifications = new ArrayList<>();
         dummyNotification1 = new Notification("userEmail1", "message1");
         dummyNotification2 = new Notification("userEmail2", "message2");

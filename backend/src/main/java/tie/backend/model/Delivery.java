@@ -5,7 +5,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,35 +25,35 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_name")
+    @Column(name = "userN")
     private String userName;
 
-    @Column(name = "user_email")
+    @Column(name = "userE")
     private String userEmail;
 
-    @Column(name = "package_id")
+    @Column(name = "packageI")
     private Long packageId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "pickup_point_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PickupPoint pickupPoint;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "store_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Store store;
 
     @Column(name = "status")
-    private DeliveryStatus status;
+    private String status;
 
-    @Column(name = "registery_date")
+    @Column(name = "registeryD")
     private String registeryDate;
 
-    @Column(name = "delivery_date")
+    @Column(name = "deliveryD")
     private String deliveryDate;
 
-    @Column(name = "pickup_date")
+    @Column(name = "pickupD")
     private String pickupDate;
 
     // CONSTRUCTORS
@@ -66,7 +65,7 @@ public class Delivery {
         this.packageId = packageId;
         this.pickupPoint = pickupPoint;
         this.store = store;
-        this.status = DeliveryStatus.DISPATCHED;
+        this.status = "DISPATCHED";
         this.registeryDate = LocalDate.now().toString();
         this.deliveryDate = null;
         this.pickupDate = null;
@@ -92,7 +91,7 @@ public class Delivery {
     public String getRegisteryDate() {
         return registeryDate;
     }
-    public DeliveryStatus getStatus() {
+    public String getStatus() {
         return status;
     }
     public Store getStore() {
@@ -125,7 +124,7 @@ public class Delivery {
     public void setRegisteryDate(String registeryDate) {
         this.registeryDate = registeryDate;
     }
-    public void setStatus(DeliveryStatus status) {
+    public void setStatus(String status) {
         this.status = status;
     }
     public void setStore(Store store) {

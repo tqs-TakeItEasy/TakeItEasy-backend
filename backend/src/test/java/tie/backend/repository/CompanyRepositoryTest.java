@@ -23,12 +23,14 @@ class CompanyRepositoryTest {
     @Autowired
     private CompanyRepository companyRepository;
 
-    private ArrayList<Company> dummyCompanies;
+    private List<Company> dummyCompanies;
     private Company dummyCompany1;
     private Company dummyCompany2;
     
     @BeforeEach
     void setUp(){
+        companyRepository.deleteAll();
+        
         dummyCompanies = new ArrayList<>();
         dummyCompany1 = new Company("name1", "email1");
         dummyCompany2 = new Company("name2", "email2");

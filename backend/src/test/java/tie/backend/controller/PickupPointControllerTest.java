@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
-import tie.backend.model.PickupPointStatus;
 import tie.backend.service.PickupPointService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -89,7 +88,7 @@ class PickupPointControllerTest {
     @Test
     void whenGetDeliveryById_thenReturnDelivery() throws Exception{
 
-        when(pickupPointService.getPickupPointsByStatus(PickupPointStatus.AVAILABLE)).thenReturn(dummyPickupPoints);
+        when(pickupPointService.getPickupPointsByStatus("AVAILABLE")).thenReturn(dummyPickupPoints);
 
         mvc.perform(get("/api/v1/pickuppoints/status/" + "AVAILABLE" + "/")
             .contentType(MediaType.APPLICATION_JSON))
@@ -100,7 +99,7 @@ class PickupPointControllerTest {
             .andExpect(jsonPath("$[2].email").value(dummyPickupPoint3.getEmail()));
         ;
 
-        verify(pickupPointService, times(1)).getPickupPointsByStatus(PickupPointStatus.AVAILABLE);
+        verify(pickupPointService, times(1)).getPickupPointsByStatus("AVAILABLE");
     }
 
     @Test

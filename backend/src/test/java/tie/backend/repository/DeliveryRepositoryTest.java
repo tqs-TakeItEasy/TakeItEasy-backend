@@ -35,6 +35,8 @@ class DeliveryRepositoryTest {
 
     @BeforeEach
     void setUp(){
+        deliveryRepository.deleteAll();
+
         dummyDeliveries = new ArrayList<>();
         dummyPickupPoint = new PickupPoint();
         dummyStore = new Store();

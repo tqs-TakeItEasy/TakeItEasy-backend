@@ -19,10 +19,10 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "company_email")
+    @Column(name = "companyEmail")
     private String companyEmail;
 
-    @Column(name = "user_email")
+    @Column(name = "userEmail")
     private String userEmail;
 
     @Column(name = "message")

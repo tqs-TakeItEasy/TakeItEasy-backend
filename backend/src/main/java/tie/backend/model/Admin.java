@@ -8,7 +8,6 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "admin")
 public class Admin {
 
     // TABLE
@@ -35,7 +34,7 @@ public class Admin {
     @Column(name = "pwd")
     private String pwd;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "company_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Company company;

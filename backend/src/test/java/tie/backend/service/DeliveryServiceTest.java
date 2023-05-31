@@ -157,7 +157,7 @@ class DeliveryServiceTest {
 
     @Test
     void whenAddDeliveryByValidPackageID_thenReturnDelivery() {
-        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.of(dummyDelivery1));
+        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.empty());
 
         Delivery newDelivery = deliveryService.addDelivery(dummyDelivery1);
 
@@ -169,17 +169,16 @@ class DeliveryServiceTest {
     }
 
     @Test
-    void whenAddDeliveryByInValidPackageID_thenInvalidPackageID() {
-        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.empty());
+    void whenAddDeliveryByInvalidPackageID_thenReturnInvalidPackageID() {
+        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.ofNullable(dummyDelivery1));
 
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
             deliveryService.addDelivery(dummyDelivery1);
         });
-        Assertions.assertEquals("This Delivery's packageID already exists", exception.getReason());
+        Assertions.assertEquals("This Delivery's Package ID already exists", exception.getReason());
 
         verify(deliveryRepository, times(1)).findByPackageId(dummyDelivery1.getPackageId());
         verify(deliveryRepository, times(0)).save(dummyDelivery1);
-
     }
 
     @Test
@@ -192,6 +191,20 @@ class DeliveryServiceTest {
         assertEquals(dummyDelivery1_5.getStatus(), updatedDelivery.getStatus());
 
         verify(deliveryRepository, times(1)).findById(dummyDelivery1_5.getId());
+        verify(deliveryRepository, times(1)).save(dummyDelivery1);
 
+    }
+
+    @Test
+    void whenUpdateDeliveryByInValidID_thenReturnInvalidID() throws ResourceNotFoundException {
+        when(deliveryRepository.findById(dummyDelivery1_5.getId())).thenReturn(Optional.empty());
+
+        ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> {
+            deliveryService.updateDeliveryStatus(dummyDelivery1_5);
+        });
+        Assertions.assertEquals("This Delivery does not exist!", exception.getMessage());
+
+        verify(deliveryRepository, times(1)).findById(null);
+        verify(deliveryRepository, times(0)).save(dummyDelivery1);
     }
 }

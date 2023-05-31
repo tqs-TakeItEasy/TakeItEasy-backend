@@ -44,7 +44,7 @@ public class DeliveryService {
         Optional<Delivery> pickupPointByName = repository.findByPackageId(delivery.getPackageId());
 
         if (pickupPointByName.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This Delivery's packageID already exists");
+            throw new ResponseStatusException(HttpStatus.OK, "This Delivery's Package ID already exists");
         } else {
             repository.save(delivery);
             return delivery;
@@ -52,15 +52,10 @@ public class DeliveryService {
     }
 
     public Delivery updateDeliveryStatus(Delivery delivery) throws ResourceNotFoundException {
-       Delivery existingDelivery = repository.findById(delivery.getId()).orElseThrow(() -> new ResourceNotFoundException("Resource Not Found!"));
+       Delivery existingDelivery = repository.findById(delivery.getId()).orElseThrow(() -> new ResourceNotFoundException("This Delivery does not exist!"));
 
-        if (existingDelivery != null){
-            existingDelivery.setStatus(delivery.getStatus());
-            repository.save(existingDelivery);
-            return existingDelivery;
-        } else {
-            throw new ResponseStatusException(HttpStatus.OK, "This Delivery does not exist!");
-
-        }
+       existingDelivery.setStatus(delivery.getStatus());
+       repository.save(existingDelivery);
+       return existingDelivery;
     }
 }

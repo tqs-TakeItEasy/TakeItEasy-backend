@@ -19,7 +19,7 @@ import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
 
 @DataJpaTest
-public class DeliveryRepositoryTest {
+class DeliveryRepositoryTest {
     
     @Autowired 
     private TestEntityManager testEntityManager;
@@ -107,7 +107,7 @@ public class DeliveryRepositoryTest {
         testEntityManager.persistAndFlush(pickupPoint);
         List<Delivery> returnedDeliveries = deliveryRepository.findByPickupPoint(pickupPoint);
 
-        assertThat(returnedDeliveries.isEmpty());
+        assertThat(returnedDeliveries).isEmpty();
     }
 
     @Test
@@ -125,6 +125,6 @@ public class DeliveryRepositoryTest {
         testEntityManager.persistAndFlush(store);
         List<Delivery> returnedDeliveries = deliveryRepository.findByStore(store);
 
-        assertThat(returnedDeliveries.isEmpty());
+        assertThat(returnedDeliveries).isEmpty();
     }
 }

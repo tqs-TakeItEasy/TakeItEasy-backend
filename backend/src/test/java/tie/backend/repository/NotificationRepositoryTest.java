@@ -80,6 +80,6 @@ class NotificationRepositoryTest {
         String invalidEmail = "some email";
         List<Notification> returnedNotifications = notificationRepository.findByUserEmail(invalidEmail);
 
-        assertThat(returnedNotifications.isEmpty());
+        assertThat(returnedNotifications).isEmpty();
     }
 }

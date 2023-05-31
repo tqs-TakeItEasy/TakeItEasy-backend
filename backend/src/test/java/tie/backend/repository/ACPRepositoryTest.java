@@ -109,7 +109,7 @@ class ACPRepositoryTest {
 
         List<ACP> returnedACPs = acpRepository.findByCompany(company);
 
-        assertThat(returnedACPs.isEmpty());
+        assertThat(returnedACPs).isEmpty();
     }
 
     @Test
@@ -130,6 +130,6 @@ class ACPRepositoryTest {
 
         List<ACP> returnedACPs = acpRepository.findByPickupPoint(pickupPoint);
 
-        assertThat(returnedACPs.isEmpty());
+        assertThat(returnedACPs).isEmpty();
     }
 }

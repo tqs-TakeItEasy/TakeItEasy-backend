@@ -121,7 +121,7 @@ class StoreServiceTest {
 
         List<Store> returnedStores = storeService.getStoreByCompany(company);
 
-        assertThat(returnedStores.isEmpty());
+        assertThat(returnedStores).isEmpty();
         verify(storeRepository, times(1)).findByCompany(company);
     }
 

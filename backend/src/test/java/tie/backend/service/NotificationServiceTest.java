@@ -95,7 +95,7 @@ class NotificationServiceTest {
         
         List<Notification> returnedNotifcations = notificationService.getNotificationByUserEmail(invalidEmail);
         
-        assertThat(returnedNotifcations.isEmpty());
+        assertThat(returnedNotifcations).isEmpty();
         verify(notificationRepository, times(1)).findByUserEmail(invalidEmail);
     }
 

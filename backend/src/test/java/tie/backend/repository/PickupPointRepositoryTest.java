@@ -92,6 +92,6 @@ class PickupPointRepositoryTest {
 
         List<PickupPoint> returnedPickupPoints = pickupPointRepository.findByStatus(invalid);
 
-        assertThat(returnedPickupPoints.isEmpty());
+        assertThat(returnedPickupPoints).isEmpty();
     }
 }

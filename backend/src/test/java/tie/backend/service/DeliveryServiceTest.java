@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import org.springframework.web.server.ResponseStatusException;
 import tie.backend.Exceptions.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.DeliveryStatus;
@@ -154,7 +156,7 @@ class DeliveryServiceTest {
     }
 
     @Test
-    void whenAddDeliveryByValidPackageID_thenReturnDelivery() throws ResourceNotFoundException {
+    void whenAddDeliveryByValidPackageID_thenReturnDelivery() {
         when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.of(dummyDelivery1));
 
         Delivery newDelivery = deliveryService.addDelivery(dummyDelivery1);
@@ -162,6 +164,21 @@ class DeliveryServiceTest {
         assertEquals(dummyDelivery1, newDelivery);
 
         verify(deliveryRepository, times(1)).findByPackageId(dummyDelivery1.getPackageId());
+        verify(deliveryRepository, times(1)).save(dummyDelivery1);
+
+    }
+
+    @Test
+    void whenAddDeliveryByInValidPackageID_thenInvalidPackageID() {
+        when(deliveryRepository.findByPackageId(dummyDelivery1.getPackageId())).thenReturn(Optional.empty());
+
+        ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
+            deliveryService.addDelivery(dummyDelivery1);
+        });
+        Assertions.assertEquals("This Delivery's packageID already exists", exception.getReason());
+
+        verify(deliveryRepository, times(1)).findByPackageId(dummyDelivery1.getPackageId());
+        verify(deliveryRepository, times(0)).save(dummyDelivery1);
 
     }
 

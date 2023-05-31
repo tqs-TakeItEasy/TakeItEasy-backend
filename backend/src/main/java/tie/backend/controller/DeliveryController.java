@@ -17,7 +17,7 @@ import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/v1/deliveries/")
 public class DeliveryController{
 

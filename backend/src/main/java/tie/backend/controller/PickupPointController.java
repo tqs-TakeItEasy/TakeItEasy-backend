@@ -18,7 +18,7 @@ import tie.backend.model.PickupPointStatus;
 import tie.backend.service.PickupPointService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/v1/pickuppoints/")
 public class PickupPointController {
 

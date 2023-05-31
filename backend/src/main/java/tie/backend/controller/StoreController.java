@@ -18,7 +18,7 @@ import tie.backend.model.Store;
 import tie.backend.service.StoreService;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 @RequestMapping("/api/v1/stores/")
 public class StoreController {
     

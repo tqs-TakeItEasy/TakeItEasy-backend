@@ -19,9 +19,11 @@ jobs:
         with:
           java-version: '17'
       - name: Build with Maven
-        run: cd backend && ./mvnw package
-      # - name: Start Containers
-      #   run: docker compose -f "docker-compose.yml" up -d --build
-      # - name: Stop containers
-      #   if: always()
-      #   run: docker-compose -f "docker-compose.yml" down
+        working-directory: backend
+        run: mvn clean package  
+      - name: Build and run Docker Compose stack
+        run: |
+          docker-compose up --build -d
+          docker-compose ps
+      - name: Stop and remove Docker Compose stack
+        run: docker-compose down

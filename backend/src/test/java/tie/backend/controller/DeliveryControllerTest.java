@@ -156,7 +156,7 @@ class DeliveryControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtils.toJson(dummyDelivery1)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.packageId").value(dummyPickupPoint1.getName()));
+                .andExpect(jsonPath("$.packageId").value(dummyDelivery1.getPackageId().intValue()));
 
         verify(deliveryService, times(1)).addDelivery(dummyDelivery1);
     }

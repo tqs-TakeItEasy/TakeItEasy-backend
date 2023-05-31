@@ -5,11 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
@@ -59,6 +55,13 @@ public class DeliveryController{
             return ResponseEntity.ok().body(deliveries);
         }
         return ResponseEntity.noContent().build();
+    }
+
+    // POST - NEW PICKUP POINT
+    @PostMapping("add/")
+    public ResponseEntity<Delivery> addDelivery(@RequestBody Delivery delivery) {
+        Delivery newDelivery = deliveryService.addDelivery(delivery);
+        return ResponseEntity.ok().body(newDelivery);
     }
 
 }

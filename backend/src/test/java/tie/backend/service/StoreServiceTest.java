@@ -126,6 +126,19 @@ class StoreServiceTest {
     }
 
     @Test
+    void WhenAddValidStore_ThenReturnCreatedStore(){
+        when(storeRepository.findByName(dummyStore1.getName())).thenReturn(Optional.ofNullable(null));
+        when(storeRepository.findByEmail(dummyStore1.getEmail())).thenReturn(Optional.ofNullable(null));
+
+        Store NewStore = storeService.addStore(dummyStore1);
+        assertEquals( dummyStore1,  NewStore);
+
+        verify(storeRepository, times(1)).findByName(dummyStore1.getName());
+        verify(storeRepository, times(1)).findByEmail(dummyStore1.getEmail());
+        verify(storeRepository, times(1)).save(dummyStore1);
+    }
+
+    @Test
     void WhenAddInvalidStoreName_ThenReturnInvalidName(){
         when(storeRepository.findByName(dummyStore1.getName())).thenReturn(Optional.of(dummyStore1));
         when(storeRepository.findByEmail(dummyStore1.getEmail())).thenReturn(Optional.empty());

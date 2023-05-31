@@ -45,11 +45,12 @@ public class PickupPoint {
     // CONSTRUCTORS
 
     public PickupPoint(){}
-    public PickupPoint(String name, String address, String email) {
+    public PickupPoint(String name, String address, String email, Company company) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.status = PickupPointStatus.AVAILABLE;
+        this.company = company;
     }
 
     // GETTERS
@@ -60,7 +61,6 @@ public class PickupPoint {
     public String getEmail() {
         return email;
     }
-
     public Company getCompany() {
         return company;
     }
@@ -79,8 +79,9 @@ public class PickupPoint {
     public void setAddress(String address) {
         this.address = address;
     }
-
-    public void setEmail(String email) {this.email = email;}
+    public void setEmail(String email) {
+        this.email = email;
+    }
     public void setCompany(Company company) {
         this.company = company;
     }
@@ -113,7 +114,7 @@ public class PickupPoint {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, address, email,status, company);
+        return Objects.hash(name, address, email, status, company);
     }
 
     // STRING REPRESENTATION

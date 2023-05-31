@@ -16,7 +16,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table
+@Table(name = "store")
 public class Store {
 
     // TABLE
@@ -81,12 +81,12 @@ public class Store {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof Company)) {
+        if (!(o instanceof Store)) {
             return false;
         }
         Store store = (Store) o;
-        return  Objects.equals(name, store.name) && 
-                Objects.equals(email, store.email) && 
+        return  Objects.equals(name, store.name) &&
+                Objects.equals(email, store.email) &&
                 Objects.equals(company, store.company);
     }
 

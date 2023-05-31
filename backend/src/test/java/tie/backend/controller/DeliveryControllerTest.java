@@ -7,6 +7,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +27,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import tie.backend.config.JsonUtils;
 import tie.backend.model.Company;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
@@ -143,6 +145,20 @@ class DeliveryControllerTest {
 
         verify(pickupPointService, times(1)).getPickupPointById(dummyDelivery1.getPickupPoint().getId());
         verify(deliveryService, times(1)).getDeliveriesByPickupPoint(dummyDelivery1.getPickupPoint());
+    }
+
+    @Test
+    void whenAddDelivery_thenReturnDelivery() throws Exception {
+
+        when(deliveryService.addDelivery(dummyDelivery1)).thenReturn(dummyDelivery1);
+
+        mvc.perform(post("/api/v1/deliveries/add/")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(JsonUtils.toJson(dummyDelivery1)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.packageId").value(dummyPickupPoint1.getName()));
+
+        verify(deliveryService, times(1)).addDelivery(dummyDelivery1);
     }
    
 }

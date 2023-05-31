@@ -119,7 +119,7 @@ class AdminServiceTest {
 
         List<Admin> returnedAdmins = adminService.getAdminByCompany(company);
 
-        assertThat(returnedAdmins.isEmpty()).isTrue();
+        assertThat(returnedAdmins).isEmpty();
         verify(adminRepository, times(1)).findByCompany(company);
     }
 }

@@ -107,7 +107,7 @@ class DeliveryRepositoryTest {
         testEntityManager.persistAndFlush(pickupPoint);
         List<Delivery> returnedDeliveries = deliveryRepository.findByPickupPoint(pickupPoint);
 
-        assertThat(returnedDeliveries.isEmpty()).isTrue();
+        assertThat(returnedDeliveries).isEmpty();
     }
 
     @Test
@@ -125,6 +125,6 @@ class DeliveryRepositoryTest {
         testEntityManager.persistAndFlush(store);
         List<Delivery> returnedDeliveries = deliveryRepository.findByStore(store);
 
-        assertThat(returnedDeliveries.isEmpty()).isTrue();
+        assertThat(returnedDeliveries).isEmpty();
     }
 }

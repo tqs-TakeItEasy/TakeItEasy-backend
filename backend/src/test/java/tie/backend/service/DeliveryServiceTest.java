@@ -130,7 +130,7 @@ class DeliveryServiceTest {
 
         List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByPickupPoint(invalidPickupPoint);
 
-        assertThat(returnedDeliveries.isEmpty()).isTrue();
+        assertThat(returnedDeliveries).isEmpty();
         verify(deliveryRepository, times(1)).findByPickupPoint(invalidPickupPoint);
     }
 
@@ -151,7 +151,7 @@ class DeliveryServiceTest {
 
         List<Delivery> returnedDeliveries = deliveryService.getDeliveriesByStore(invalidStore);
 
-        assertThat(returnedDeliveries.isEmpty()).isTrue();
+        assertThat(returnedDeliveries).isEmpty();
         verify(deliveryRepository, times(1)).findByStore(invalidStore);
     }
 

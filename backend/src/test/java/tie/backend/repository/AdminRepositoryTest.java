@@ -105,6 +105,6 @@ class AdminRepositoryTest {
 
         List<Admin> returnedAdmins = adminRepository.findByCompany(company);
 
-        assertThat(returnedAdmins.isEmpty()).isTrue();
+        assertThat(returnedAdmins).isEmpty();
     }
 }

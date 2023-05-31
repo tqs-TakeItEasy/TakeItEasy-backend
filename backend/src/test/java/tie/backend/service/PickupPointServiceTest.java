@@ -98,7 +98,7 @@ class PickupPointServiceTest {
 
         List<PickupPoint> returnedPickupPoints = pickupPointService.getPickupPointsByStatus(PickupPointStatus.UNAVAILABLE);
 
-        assertThat(returnedPickupPoints.isEmpty()).isTrue();
+        assertThat(returnedPickupPoints).isEmpty();
         verify(pickupPointRepository, times(1)).findByStatus(PickupPointStatus.UNAVAILABLE);
     }
 

@@ -182,8 +182,9 @@ class DeliveryServiceTest {
     @Test
     void whenUpdateDeliveryByValidID_thenReturnDelivery() throws ResourceNotFoundException {
         when(deliveryRepository.findById(dummyDelivery1.getId())).thenReturn(Optional.of(dummyDelivery1));
+        when(deliveryRepository.save(dummyDelivery1)).thenReturn(dummyDelivery1);
 
-        Delivery updatedDelivery = deliveryService.updateDeliveryStatus(dummyDelivery1);
+        Delivery updatedDelivery = deliveryService.updateDelivery(dummyDelivery1);
 
         assertEquals(dummyDelivery1.getPackageId(), updatedDelivery.getPackageId());
         assertEquals(dummyDelivery1.getStatus(), updatedDelivery.getStatus());
@@ -198,7 +199,7 @@ class DeliveryServiceTest {
         when(deliveryRepository.findById(dummyDelivery1.getId())).thenReturn(Optional.empty());
 
         ResourceNotFoundException exception = Assertions.assertThrows(ResourceNotFoundException.class, () -> {
-            deliveryService.updateDeliveryStatus(dummyDelivery1);
+            deliveryService.updateDelivery(dummyDelivery1);
         });
         Assertions.assertEquals("This Delivery does not exist!", exception.getMessage());
 

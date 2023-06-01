@@ -91,7 +91,7 @@ public class Admin {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof PickupPoint)) {
+        if (!(o instanceof Admin)) {
             return false;
         }
         Admin admin = (Admin) o;

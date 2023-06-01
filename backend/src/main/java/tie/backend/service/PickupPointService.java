@@ -42,4 +42,14 @@ public class PickupPointService {
     public List<PickupPoint> getPickupPointsByStatus(String status) {
         return pickupPointRepository.findByStatus(status);
     }
+
+    public PickupPoint deletePickupPoint(Long id) {
+        Optional<PickupPoint> pickupPoint = pickupPointRepository.findById(id);
+        if (pickupPoint.isPresent()){
+            pickupPointRepository.deleteById(id);
+            return pickupPoint.get();
+        } else {
+            return null;
+        }
+    }
 }

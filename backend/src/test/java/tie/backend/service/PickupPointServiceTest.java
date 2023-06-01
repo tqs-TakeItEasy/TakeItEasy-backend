@@ -102,7 +102,7 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){
+    void whenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.ofNullable(null));
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.ofNullable(null));
 
@@ -115,7 +115,7 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddInvalidPickupPointName_ThenReturnInvalidName(){
+    void whenAddInvalidPickupPointName_ThenReturnInvalidName(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.of(dummyPickupPoint1));
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.empty());
 
@@ -130,7 +130,7 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
+    void whenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.empty());
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.of(dummyPickupPoint1));
 

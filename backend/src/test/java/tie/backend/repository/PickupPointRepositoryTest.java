@@ -101,7 +101,16 @@ class PickupPointRepositoryTest {
         List<PickupPoint> pickupPoints = pickupPointRepository.findAll();
 
         testEntityManager.persistAndFlush(dummyPickupPoint1);
-        pickupPointRepository.delete(dummyPickupPoint1);
+        pickupPointRepository.deleteById(dummyPickupPoint1.getId());
+
+        assertEquals(pickupPoints, pickupPointRepository.findAll());
+    }
+
+    @Test
+    void whenDeleteInvalidPickupPoint_thenNoneDeleted(){
+        List<PickupPoint> pickupPoints = pickupPointRepository.findAll();
+
+        pickupPointRepository.deleteById(dummyPickupPoint1.getId());
 
         assertEquals(pickupPoints, pickupPointRepository.findAll());
     }

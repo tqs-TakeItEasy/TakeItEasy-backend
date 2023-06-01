@@ -19,46 +19,46 @@ import tie.backend.repository.DeliveryRepository;
 public class DeliveryService {
 
     @Autowired
-    private DeliveryRepository repository;
+    private DeliveryRepository deliveryRepository;
 
     public List<Delivery> getAllDeliveries() {
-        return repository.findAll();
+        return deliveryRepository.findAll();
     }
 
     public Optional<Delivery> getDeliveryById(Long deliveryId) {
-        return repository.findById(deliveryId);
+        return deliveryRepository.findById(deliveryId);
     }
 
     public Optional<Delivery> getDeliveryByPackageId(Long id) {
-        return repository.findByPackageId(id);
+        return deliveryRepository.findByPackageId(id);
     }
     
     public List<Delivery> getDeliveriesByPickupPoint(PickupPoint pickupPoint) {
-        return repository.findByPickupPoint(pickupPoint);
+        return deliveryRepository.findByPickupPoint(pickupPoint);
     }
 
     public List<Delivery> getDeliveriesByStore(Store store){
-        return repository.findByStore(store);
+        return deliveryRepository.findByStore(store);
     }
 
     public Delivery addDelivery(Delivery delivery) {
-        Optional<Delivery> pickupPointByName = repository.findByPackageId(delivery.getPackageId());
+        Optional<Delivery> deliveryPackageId = deliveryRepository.findByPackageId(delivery.getPackageId());
 
-        if (pickupPointByName.isPresent()){
+        if (deliveryPackageId.isPresent()){
             throw new ResponseStatusException(HttpStatus.OK, "This Delivery's Package ID already exists");
         } else {
-            repository.save(delivery);
+            deliveryRepository.save(delivery);
             return delivery;
         }
     }
 
     public Delivery updateDeliveryStatus(Delivery delivery) throws ResourceNotFoundException {
-        Optional<Delivery> existingDelivery = repository.findById(delivery.getId());
+        Optional<Delivery> existingDelivery = deliveryRepository.findById(delivery.getId());
 
         if (existingDelivery.isPresent()){
             Delivery updatDelivery = existingDelivery.get();
             updatDelivery.setStatus(delivery.getStatus());
-            repository.save(updatDelivery);
+            deliveryRepository.save(updatDelivery);
             return updatDelivery;
         } else {
             throw new ResourceNotFoundException("This Delivery does not exist!");

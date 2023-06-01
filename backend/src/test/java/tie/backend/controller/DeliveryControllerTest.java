@@ -29,12 +29,14 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.config.JsonUtils;
+import tie.backend.dto.DeliveryDTO;
 import tie.backend.model.Company;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
 import tie.backend.model.Store;
 import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
+import tie.backend.service.StoreService;
 
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -50,6 +52,9 @@ class DeliveryControllerTest {
 
     @MockBean
     private PickupPointService pickupPointService;
+
+    @MockBean
+    private StoreService storeService;
 
     private List<Delivery> dummyDeliveries;
     private Company dummyCompany1;
@@ -155,13 +160,18 @@ class DeliveryControllerTest {
     @Test
     void whenAddDelivery_thenReturnDelivery() throws Exception {
 
+        DeliveryDTO deliveryDTO = new DeliveryDTO();
+        deliveryDTO.fromDelivery(dummyDelivery1);
+
+        when(pickupPointService.getPickupPointById(dummyDelivery1.getPickupPoint().getId())).thenReturn(Optional.of(dummyDelivery1.getPickupPoint()));
+        when(storeService.getStoreById(dummyDelivery1.getStore().getId())).thenReturn(Optional.of(dummyDelivery1.getStore()));
         when(deliveryService.addDelivery(dummyDelivery1)).thenReturn(dummyDelivery1);
 
         mvc.perform(post("/api/v1/deliveries/add/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.toJson(dummyDelivery1)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.packageId").value(dummyDelivery1.getPackageId().intValue()));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(JsonUtils.toJson(deliveryDTO)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.packageId").value(dummyDelivery1.getPackageId().intValue()));
 
         verify(deliveryService, times(1)).addDelivery(dummyDelivery1);
     }
@@ -170,11 +180,11 @@ class DeliveryControllerTest {
         when(deliveryService.updateDeliveryStatus(dummyDelivery1_5)).thenReturn(dummyDelivery1_5);
 
         mvc.perform(put("/api/v1/deliveries/updateStatus/")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtils.toJson(dummyDelivery1_5)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.packageId").value(dummyDelivery1_5.getPackageId().intValue()))
-                .andExpect(jsonPath("$.status").value(dummyDelivery1_5.getStatus().toString()));
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(JsonUtils.toJson(dummyDelivery1_5)))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.packageId").value(dummyDelivery1_5.getPackageId().intValue()))
+            .andExpect(jsonPath("$.status").value(dummyDelivery1_5.getStatus().toString()));
 
         verify(deliveryService, times(1)).updateDeliveryStatus(dummyDelivery1_5);
     }

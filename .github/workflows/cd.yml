@@ -25,7 +25,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: TakeItEasy-backend/backend
+          context: ./backend
           push: true
           tags: gcr.io/take-it-easy-388521/takeiteasy_backend_spring_tie:latest
           build-args: |

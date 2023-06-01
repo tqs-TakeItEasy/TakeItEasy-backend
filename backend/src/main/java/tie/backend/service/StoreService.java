@@ -40,9 +40,9 @@ public class StoreService {
         Optional<Store> storeByEmail = storeRepository.findByEmail(store.getEmail());
 
         if (storeByName.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This Store's name already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Store's name already exists");
         } else if (storeByEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.OK, "This Store's email already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Store's email already exists");
         } else {
             storeRepository.save(store);
             return store;

@@ -28,13 +28,13 @@ import javax.validation.Valid;
 public class DeliveryController{
 
     @Autowired
-    DeliveryService deliveryService;
+    private DeliveryService deliveryService;
 
     @Autowired
-    StoreService storeService;
+    private StoreService storeService;
 
     @Autowired
-    PickupPointService pickupPointService;
+    private PickupPointService pickupPointService;
 
     // GET - All Deliveries
     @GetMapping("")

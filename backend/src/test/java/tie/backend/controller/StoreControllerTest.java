@@ -28,8 +28,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.config.JsonUtils;
+import tie.backend.dto.StoreDTO;
 import tie.backend.model.Company;
 import tie.backend.model.Store;
+import tie.backend.service.CompanyService;
 import tie.backend.service.StoreService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -42,6 +44,9 @@ class StoreControllerTest {
 
     @MockBean
     private StoreService storeService;
+   
+    @MockBean
+    private CompanyService companyService;
 
     private List<Store> dummyStores;
     private Company dummyCompany1;
@@ -109,11 +114,15 @@ class StoreControllerTest {
     @Test
     void whenAddStore_thenReturnStore() throws Exception {
 
+        StoreDTO storeDTO = new StoreDTO();
+        storeDTO.fromStore(dummyStore1);
+
+        when(companyService.getCompanyById(dummyStore1.getCompany().getId())).thenReturn(Optional.of(dummyStore1.getCompany()));
         when(storeService.addStore(dummyStore1)).thenReturn(dummyStore1);
 
         mvc.perform(post("/api/v1/stores/add/")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtils.toJson(dummyStore1)))
+            .content(JsonUtils.toJson(storeDTO)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(dummyStore1.getName()))
             .andExpect(jsonPath("$.email").value(dummyStore1.getEmail()));

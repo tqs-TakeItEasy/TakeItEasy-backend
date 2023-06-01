@@ -103,7 +103,7 @@ public class ACP {
     public boolean equals(Object o) {
         if (o == this)
             return true;
-        if (!(o instanceof PickupPoint)) {
+        if (!(o instanceof ACP)) {
             return false;
         }
         ACP aCP = (ACP) o;

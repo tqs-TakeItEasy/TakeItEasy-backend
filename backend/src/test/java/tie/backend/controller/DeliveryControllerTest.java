@@ -181,15 +181,15 @@ class DeliveryControllerTest {
     }
     @Test
     void whenUpdateDeliveryStatus_thenReturnDelivery() throws Exception {
-        when(deliveryService.updateDeliveryStatus(dummyDelivery1_5)).thenReturn(dummyDelivery1_5);
+        when(deliveryService.updateDelivery(dummyDelivery1_5)).thenReturn(dummyDelivery1_5);
 
-        mvc.perform(put("/api/v1/deliveries/updateStatus/")
+        mvc.perform(put("/api/v1/deliveries/update/")
             .contentType(MediaType.APPLICATION_JSON)
             .content(JsonUtils.toJson(dummyDelivery1_5)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.packageId").value(dummyDelivery1_5.getPackageId().intValue()))
             .andExpect(jsonPath("$.status").value(dummyDelivery1_5.getStatus().toString()));
 
-        verify(deliveryService, times(1)).updateDeliveryStatus(dummyDelivery1_5);
+        verify(deliveryService, times(1)).updateDelivery(dummyDelivery1_5);
     }
 }

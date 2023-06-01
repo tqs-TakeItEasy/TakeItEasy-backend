@@ -69,7 +69,7 @@ public class DeliveryController{
         return ResponseEntity.noContent().build();
     }
 
-    // POST - NEW PICKUP POINT
+    // POST - NEW DELIVERY
     @PostMapping("add/")
     public ResponseEntity<PackageDTO> addDelivery(@RequestBody DeliveryDTO deliveryDTO) {
         Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(deliveryDTO.getPickupPointId());
@@ -84,8 +84,7 @@ public class DeliveryController{
                     store.get()
                 );
                 Delivery newDelivery = deliveryService.addDelivery(delivery);
-                PackageDTO packageDTO = new PackageDTO();
-                return ResponseEntity.ok().body(packageDTO.fromDelivery(newDelivery));
+                return ResponseEntity.ok().body(new PackageDTO(newDelivery.getId()));
             }
             return ResponseEntity.badRequest().build();
         }
@@ -94,8 +93,8 @@ public class DeliveryController{
 
     // PUT - UPDATE DELIVERY STATUS
 
-    @PutMapping("updateStatus/")
-    public ResponseEntity<Delivery> updateDeliveryStatus(@RequestBody Delivery delivery) throws ResourceNotFoundException {
-        return ResponseEntity.ok(deliveryService.updateDeliveryStatus(delivery));
+    @PutMapping("update/")
+    public ResponseEntity<Delivery> updateDelivery(@RequestBody Delivery delivery) throws ResourceNotFoundException {
+        return ResponseEntity.ok(deliveryService.updateDelivery(delivery));
     }
 }

@@ -52,14 +52,12 @@ public class DeliveryService {
         }
     }
 
-    public Delivery updateDeliveryStatus(Delivery delivery) throws ResourceNotFoundException {
+    public Delivery updateDelivery(Delivery delivery) throws ResourceNotFoundException {
         Optional<Delivery> existingDelivery = deliveryRepository.findById(delivery.getId());
 
         if (existingDelivery.isPresent()){
-            Delivery updatDelivery = existingDelivery.get();
-            updatDelivery.setStatus(delivery.getStatus());
-            deliveryRepository.save(updatDelivery);
-            return updatDelivery;
+            Delivery updatedDelivery = deliveryRepository.save(existingDelivery.get());
+            return updatedDelivery;
         } else {
             throw new ResourceNotFoundException("This Delivery does not exist!");
         }

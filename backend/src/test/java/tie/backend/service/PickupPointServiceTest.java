@@ -102,7 +102,7 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){
+    void whenAddValidPickupPoint_ThenReturnCreatedPickupPoint(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.ofNullable(null));
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.ofNullable(null));
 
@@ -115,14 +115,15 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddInvalidPickupPointName_ThenReturnInvalidName(){
+    void whenAddInvalidPickupPointName_ThenReturnInvalidName(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.of(dummyPickupPoint1));
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.empty());
 
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
             pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
-        Assertions.assertEquals("This PickupPoint's name already exists", exception.getReason());
+        
+        assertEquals("This PickupPoint's name already exists", exception.getReason());
 
         verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
         verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
@@ -130,17 +131,46 @@ class PickupPointServiceTest {
     }
 
     @Test
-    void WhenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
+    void whenAddInvalidPickupPointEmail_ThenReturnInvalidEmail(){
         when(pickupPointRepository.findByName(dummyPickupPoint1.getName())).thenReturn(Optional.empty());
         when(pickupPointRepository.findByEmail(dummyPickupPoint1.getEmail())).thenReturn(Optional.of(dummyPickupPoint1));
 
         ResponseStatusException exception = Assertions.assertThrows(ResponseStatusException.class, () -> {
             pickupPointService.addPickupPoint(dummyPickupPoint1);
         });
-        Assertions.assertEquals("This PickupPoint's email already exists", exception.getReason());
+        
+        assertEquals("This PickupPoint's email already exists", exception.getReason());
 
         verify(pickupPointRepository, times(1)).findByName(dummyPickupPoint1.getName());
         verify(pickupPointRepository, times(1)).findByEmail(dummyPickupPoint1.getEmail());
         verify(pickupPointRepository, times(0)).save(dummyPickupPoint1);
+    }
+
+    @Test
+    void whenDeletePickupPoint_thenReturnPickupPoint() {
+        dummyPickupPoint1.setId(10L);
+
+        when(pickupPointRepository.findById(dummyPickupPoint1.getId())).thenReturn(Optional.of(dummyPickupPoint1));
+
+        PickupPoint pickupPoint = pickupPointService.deletePickupPointById(dummyPickupPoint1.getId());
+
+        assertEquals(dummyPickupPoint1, pickupPoint);
+
+        verify(pickupPointRepository, times(1)).findById(dummyPickupPoint1.getId());
+        verify(pickupPointRepository, times(1)).deleteById(dummyPickupPoint1.getId());
+    }
+
+    @Test
+    void whenDeleteInvalidPickupPoint_thenReturnPickupPoint() {
+        Long invalid = 200L;
+
+        when(pickupPointRepository.findById(invalid)).thenReturn(Optional.ofNullable(null));
+
+        PickupPoint pickupPoint = pickupPointService.deletePickupPointById(invalid);
+
+        assertNull(pickupPoint);
+
+        verify(pickupPointRepository, times(1)).findById(invalid);
+        verify(pickupPointRepository, times(0)).deleteById(invalid);
     }
 }

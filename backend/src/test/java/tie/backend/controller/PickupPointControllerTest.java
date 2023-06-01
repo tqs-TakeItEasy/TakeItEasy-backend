@@ -6,8 +6,9 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -86,7 +87,7 @@ class PickupPointControllerTest {
     }
 
     @Test
-    void whenGetDeliveryById_thenReturnDelivery() throws Exception{
+    void whenGetPickupPointByStatus_thenReturnDelivery() throws Exception{
 
         when(pickupPointService.getPickupPointsByStatus("AVAILABLE")).thenReturn(dummyPickupPoints);
 
@@ -118,4 +119,21 @@ class PickupPointControllerTest {
         verify(pickupPointService, times(1)).addPickupPoint(dummyPickupPoint1);
     }
 
+    @Test
+    void whenDeletePickupPoint_thenReturnPickupPoint() throws Exception {
+
+        Long id = 1L;
+        dummyPickupPoint1.setId(id);
+
+        when(pickupPointService.deletePickupPointById(dummyPickupPoint1.getId())).thenReturn(dummyPickupPoint1);
+
+        mvc.perform(delete("/api/v1/pickuppoints/" + Long.toString(id) + "/")
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value(dummyPickupPoint1.getName()))
+            .andExpect(jsonPath("$.address").value(dummyPickupPoint1.getAddress()))
+            .andExpect(jsonPath("$.email").value(dummyPickupPoint1.getEmail()));
+
+        verify(pickupPointService, times(1)).deletePickupPointById(dummyPickupPoint1.getId());
+    }
 }

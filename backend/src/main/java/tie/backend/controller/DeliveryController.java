@@ -7,11 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import tie.backend.dto.DeliveryDTO;
 import tie.backend.exception.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
+import tie.backend.model.Store;
 import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
+import tie.backend.service.StoreService;
 
 import javax.validation.Valid;
 
@@ -26,6 +29,9 @@ public class DeliveryController{
 
     @Autowired
     DeliveryService deliveryService;
+
+    @Autowired
+    StoreService storeService;
 
     @Autowired
     PickupPointService pickupPointService;
@@ -66,9 +72,24 @@ public class DeliveryController{
 
     // POST - NEW PICKUP POINT
     @PostMapping("add/")
-    public ResponseEntity<Delivery> addDelivery(@RequestBody Delivery delivery) {
-        Delivery newDelivery = deliveryService.addDelivery(delivery);
-        return ResponseEntity.ok().body(newDelivery);
+    public ResponseEntity<Delivery> addDelivery(@RequestBody DeliveryDTO deliveryDTO) {
+        Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(deliveryDTO.getPickupPointId());
+        if (pickupPoint.isPresent()) {
+            Optional<Store> store = storeService.getStoreById(deliveryDTO.getStoreId());
+            if (store.isPresent()) {
+                Delivery delivery = new Delivery(   
+                    deliveryDTO.getUserName(), 
+                    deliveryDTO.getUserEmail(), 
+                    deliveryDTO.getPackageId(), 
+                    pickupPoint.get(), 
+                    store.get()
+                );
+                Delivery newDelivery = deliveryService.addDelivery(delivery);
+                return ResponseEntity.ok().body(newDelivery);
+            }
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.badRequest().build();
     }
 
     // PUT - UPDATE DELIVERY STATUS

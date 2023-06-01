@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class PickupPointController {
     }
 
     // GET - PICKUP POINT BY STATUS
-    @GetMapping("/status/{status}/")
+    @GetMapping("status/{status}/")
     public ResponseEntity<List<PickupPoint>> getPickupPointsByStatus(@PathVariable(value="status") String status) {
         try {
             List<PickupPoint> pickupPoints = pickupPointService.getPickupPointsByStatus(status);
@@ -51,5 +52,15 @@ public class PickupPointController {
     public ResponseEntity<PickupPoint> addPickupPoint(@RequestBody PickupPoint pickupPoint) {
         PickupPoint newPickupPoint = pickupPointService.addPickupPoint(pickupPoint);
         return ResponseEntity.ok().body(newPickupPoint);
+    }
+
+    // DELETE - DELETE PICKUP POINT
+    @DeleteMapping("{pickupPointId}/")
+    public ResponseEntity<PickupPoint> deleteOrder(@PathVariable(value="pickupPointId") String pickupPointId) {
+        if (!pickupPointId.matches("\\d+")){
+            return ResponseEntity.badRequest().build();
+        }
+        PickupPoint pickupPoint = pickupPointService.deletePickupPointById(Long.parseLong(pickupPointId));
+        return ResponseEntity.ok().body(pickupPoint);
     }
 }

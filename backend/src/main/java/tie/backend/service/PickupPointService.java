@@ -43,7 +43,7 @@ public class PickupPointService {
         return pickupPointRepository.findByStatus(status);
     }
 
-    public PickupPoint deletePickupPoint(Long id) {
+    public PickupPoint deletePickupPointById(Long id) {
         Optional<PickupPoint> pickupPoint = pickupPointRepository.findById(id);
         if (pickupPoint.isPresent()){
             pickupPointRepository.deleteById(id);

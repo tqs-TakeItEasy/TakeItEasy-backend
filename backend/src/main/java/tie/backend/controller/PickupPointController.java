@@ -37,7 +37,7 @@ public class PickupPointController {
     }
 
     // GET - PICKUP POINT BY STATUS
-    @GetMapping("/status/{status}/")
+    @GetMapping("status/{status}/")
     public ResponseEntity<List<PickupPoint>> getPickupPointsByStatus(@PathVariable(value="status") String status) {
         try {
             List<PickupPoint> pickupPoints = pickupPointService.getPickupPointsByStatus(status);
@@ -55,7 +55,7 @@ public class PickupPointController {
     }
 
     // DELETE - DELETE PICKUP POINT
-    @DeleteMapping("/{pickupPointId}/")
+    @DeleteMapping("{pickupPointId}/")
     public ResponseEntity<PickupPoint> deleteOrder(@PathVariable(value="pickupPointId") String pickupPointId) {
         if (!pickupPointId.matches("\\d+")){
             return ResponseEntity.badRequest().build();

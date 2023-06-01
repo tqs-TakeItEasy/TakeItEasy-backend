@@ -34,9 +34,9 @@ public class CompanyService {
         Optional<Company> companyByEmail = companyRepository.findByEmail(company.getEmail());
 
         if (companyByName.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This Company's name already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "This Company's name already exists");
         } else if (companyByEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.OK, "This Company's email already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "This Company's email already exists");
         } else {
             companyRepository.save(company);
             return company;

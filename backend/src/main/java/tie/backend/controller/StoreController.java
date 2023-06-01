@@ -14,7 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tie.backend.dto.StoreDTO;
+import tie.backend.model.Company;
 import tie.backend.model.Store;
+import tie.backend.service.CompanyService;
 import tie.backend.service.StoreService;
 
 @RestController
@@ -28,6 +31,9 @@ public class StoreController {
     
     @Autowired
     private StoreService storeService;
+
+    @Autowired
+    private CompanyService companyService;
 
     // GET - All Stores
     @GetMapping("")
@@ -51,8 +57,17 @@ public class StoreController {
 
     // POST - NEW STORE
     @PostMapping("add/")
-    public ResponseEntity<Store> addStore(@RequestBody Store pickupPoint) {
-        Store newStore = storeService.addStore(pickupPoint);
-        return ResponseEntity.ok().body(newStore);
+    public ResponseEntity<Store> addStore(@RequestBody StoreDTO storeDTO) {
+        Optional<Company> company = companyService.getCompanyById(storeDTO.getCompanyId());
+        if (company.isPresent()) {
+            Store store = new Store(   
+                storeDTO.getName(), 
+                storeDTO.getEmail(), 
+                company.get()
+            );
+            Store newStore = storeService.addStore(store);
+            return ResponseEntity.ok().body(newStore);
+        }
+        return ResponseEntity.badRequest().build();
     }
 }

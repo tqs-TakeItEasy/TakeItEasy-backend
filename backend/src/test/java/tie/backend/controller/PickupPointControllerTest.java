@@ -15,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,8 +29,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import tie.backend.config.JsonUtils;
+import tie.backend.dto.PickupPointDTO;
 import tie.backend.model.Company;
 import tie.backend.model.PickupPoint;
+import tie.backend.service.CompanyService;
 import tie.backend.service.PickupPointService;
 
 @SpringBootTest(webEnvironment = WebEnvironment.MOCK)
@@ -42,6 +45,9 @@ class PickupPointControllerTest {
 
     @MockBean
     private PickupPointService pickupPointService;
+
+    @MockBean
+    private CompanyService companyService;
 
     private List<PickupPoint> dummyPickupPoints;
     private Company dummyCompany1;
@@ -106,11 +112,15 @@ class PickupPointControllerTest {
     @Test
     void whenAddPickupPoint_thenReturnPickupPoint() throws Exception {
 
+        PickupPointDTO pickupPointDTO = new PickupPointDTO();
+        pickupPointDTO.fromPickupPoint(dummyPickupPoint1);
+
+        when(companyService.getCompanyById(dummyPickupPoint1.getCompany().getId())).thenReturn(Optional.of(dummyPickupPoint1.getCompany()));
         when(pickupPointService.addPickupPoint(dummyPickupPoint1)).thenReturn(dummyPickupPoint1);
 
         mvc.perform(post("/api/v1/pickuppoints/add/")
             .contentType(MediaType.APPLICATION_JSON)
-            .content(JsonUtils.toJson(dummyPickupPoint1)))
+            .content(JsonUtils.toJson(pickupPointDTO)))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(dummyPickupPoint1.getName()))
             .andExpect(jsonPath("$.address").value(dummyPickupPoint1.getAddress()))

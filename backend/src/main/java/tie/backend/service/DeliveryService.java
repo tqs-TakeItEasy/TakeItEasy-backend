@@ -45,7 +45,7 @@ public class DeliveryService {
         Optional<Delivery> deliveryPackageId = deliveryRepository.findByPackageId(delivery.getPackageId());
 
         if (deliveryPackageId.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This Delivery's Package ID already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "This Delivery's Package ID already exists");
         } else {
             deliveryRepository.save(delivery);
             return delivery;

@@ -22,9 +22,9 @@ public class PickupPointService {
         Optional<PickupPoint> pickupPointByEmail = pickupPointRepository.findByEmail(pickupPoint.getEmail());
 
         if (pickupPointByName.isPresent()){
-            throw new ResponseStatusException(HttpStatus.OK, "This PickupPoint's name already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "This PickupPoint's name already exists");
         } else if (pickupPointByEmail.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.OK, "This PickupPoint's email already exists");
+            throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "This PickupPoint's email already exists");
         } else {
             pickupPointRepository.save(pickupPoint);
             return pickupPoint;

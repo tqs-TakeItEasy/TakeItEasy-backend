@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import tie.backend.dto.DeliveryDTO;
+import tie.backend.dto.PackageDTO;
 import tie.backend.exception.ResourceNotFoundException;
 import tie.backend.model.Delivery;
 import tie.backend.model.PickupPoint;
@@ -15,8 +16,6 @@ import tie.backend.model.Store;
 import tie.backend.service.DeliveryService;
 import tie.backend.service.PickupPointService;
 import tie.backend.service.StoreService;
-
-import javax.validation.Valid;
 
 @RestController
 @CrossOrigin(origins={  "http://localhost:3000", "http://127.0.0.1:3000", "http://0.0.0.0:3000", 
@@ -72,7 +71,7 @@ public class DeliveryController{
 
     // POST - NEW PICKUP POINT
     @PostMapping("add/")
-    public ResponseEntity<Delivery> addDelivery(@RequestBody DeliveryDTO deliveryDTO) {
+    public ResponseEntity<PackageDTO> addDelivery(@RequestBody DeliveryDTO deliveryDTO) {
         Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(deliveryDTO.getPickupPointId());
         if (pickupPoint.isPresent()) {
             Optional<Store> store = storeService.getStoreById(deliveryDTO.getStoreId());
@@ -81,11 +80,12 @@ public class DeliveryController{
                     deliveryDTO.getUserName(), 
                     deliveryDTO.getUserEmail(), 
                     deliveryDTO.getPackageId(), 
-                    pickupPoint.get(), 
+                    pickupPoint.get(),
                     store.get()
                 );
                 Delivery newDelivery = deliveryService.addDelivery(delivery);
-                return ResponseEntity.ok().body(newDelivery);
+                PackageDTO packageDTO = new PackageDTO();
+                return ResponseEntity.ok().body(packageDTO.fromDelivery(newDelivery));
             }
             return ResponseEntity.badRequest().build();
         }
@@ -95,7 +95,7 @@ public class DeliveryController{
     // PUT - UPDATE DELIVERY STATUS
 
     @PutMapping("updateStatus/")
-    public ResponseEntity<Delivery> updateDeliveryStatus(@Valid @RequestBody Delivery deliveryDetails) throws ResourceNotFoundException {
-        return ResponseEntity.ok(deliveryService.updateDeliveryStatus(deliveryDetails));
+    public ResponseEntity<Delivery> updateDeliveryStatus(@RequestBody Delivery delivery) throws ResourceNotFoundException {
+        return ResponseEntity.ok(deliveryService.updateDeliveryStatus(delivery));
     }
 }

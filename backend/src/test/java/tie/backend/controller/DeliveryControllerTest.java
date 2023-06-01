@@ -160,6 +160,10 @@ class DeliveryControllerTest {
     @Test
     void whenAddDelivery_thenReturnDelivery() throws Exception {
 
+        dummyDelivery1.setId(1L);
+        dummyDelivery1.getPickupPoint().setId(2L);
+        dummyDelivery1.getStore().setId(3L);
+
         DeliveryDTO deliveryDTO = new DeliveryDTO();
         deliveryDTO.fromDelivery(dummyDelivery1);
 
@@ -171,7 +175,7 @@ class DeliveryControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content(JsonUtils.toJson(deliveryDTO)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.packageId").value(dummyDelivery1.getPackageId().intValue()));
+            .andExpect(jsonPath("$.deliveryId").value(dummyDelivery1.getId().intValue()));
 
         verify(deliveryService, times(1)).addDelivery(dummyDelivery1);
     }

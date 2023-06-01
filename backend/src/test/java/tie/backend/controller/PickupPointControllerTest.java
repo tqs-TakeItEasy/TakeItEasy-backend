@@ -127,7 +127,8 @@ class PickupPointControllerTest {
 
         when(pickupPointService.deletePickupPointById(dummyPickupPoint1.getId())).thenReturn(dummyPickupPoint1);
 
-        mvc.perform(delete("/api/v1/pickuppoints/delete/" + Long.toString(id) + "/", dummyPickupPoint1.getId()))
+        mvc.perform(delete("/api/v1/pickuppoints/" + Long.toString(id) + "/")
+            .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.name").value(dummyPickupPoint1.getName()))
             .andExpect(jsonPath("$.address").value(dummyPickupPoint1.getAddress()))

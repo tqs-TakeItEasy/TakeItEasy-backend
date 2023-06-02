@@ -18,11 +18,7 @@ import tie.backend.service.PickupPointService;
 import tie.backend.service.StoreService;
 
 @RestController
-@CrossOrigin(origins={  "http://localhost:3000", "http://127.0.0.1:3000", "http://0.0.0.0:3000", 
-                        "https://localhost:3000", "https://127.0.0.1:3000", "https://0.0.0.0:3000",
-                        "http://localhost:5173", "http://127.0.0.1:5173", "http://0.0.0.0:5173", 
-                        "https://localhost:5173", "https://127.0.0.1:5173", "https://0.0.0.0:5173"
-                    })
+@CrossOrigin(origins={"*"})
 @RequestMapping("/api/v1/deliveries/")
 public class DeliveryController{
 

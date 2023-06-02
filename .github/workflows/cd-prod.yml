@@ -11,13 +11,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: '17'
-      - name: Build with Maven
-        working-directory: .
-        run: mvn clean package  
 
       - name: Set up Google Cloud SDK
         uses: google-github-actions/setup-gcloud@v0

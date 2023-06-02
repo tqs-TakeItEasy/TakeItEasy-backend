@@ -16,7 +16,7 @@ jobs:
         with:
           java-version: '17'
       - name: Build with Maven
-        working-directory: backend
+        working-directory: .
         run: mvn clean package  
 
       - name: Set up Google Cloud SDK
@@ -32,7 +32,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: ./backend
+          context: . 
           push: true
           tags: gcr.io/take-it-easy-388521/takeiteasy_backend_spring_tie:latest
           build-args: |
@@ -49,3 +49,4 @@ jobs:
           env_vars: |
               FOO=bar
               ZIP=zap
+          

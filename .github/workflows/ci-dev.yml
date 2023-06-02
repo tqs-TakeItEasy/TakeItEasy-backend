@@ -19,7 +19,7 @@ jobs:
         with:
           java-version: '17'
       - name: Build with Maven
-        working-directory: backend
+        working-directory: .
         run: mvn clean package  
       - name: Build and run Docker Compose stack
         run: |

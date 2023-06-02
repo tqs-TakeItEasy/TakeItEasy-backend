@@ -56,8 +56,9 @@ public class DeliveryService {
         Optional<Delivery> existingDelivery = deliveryRepository.findById(delivery.getId());
 
         if (existingDelivery.isPresent()){
-            Delivery updatedDelivery = deliveryRepository.save(existingDelivery.get());
-            return updatedDelivery;
+            Delivery deliveryToUpdate = existingDelivery.get();
+            deliveryToUpdate.update(delivery);
+            return deliveryRepository.save(deliveryToUpdate);
         } else {
             throw new ResourceNotFoundException("This Delivery does not exist!");
         }

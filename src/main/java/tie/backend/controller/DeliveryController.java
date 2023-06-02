@@ -73,6 +73,7 @@ public class DeliveryController{
     @PostMapping("add/")
     public ResponseEntity<PackageDTO> addDelivery(@RequestBody DeliveryDTO deliveryDTO) {
         Optional<PickupPoint> pickupPoint = pickupPointService.getPickupPointById(deliveryDTO.getPickupPointId());
+        
         if (pickupPoint.isPresent()) {
             Optional<Store> store = storeService.getStoreById(deliveryDTO.getStoreId());
             if (store.isPresent()) {

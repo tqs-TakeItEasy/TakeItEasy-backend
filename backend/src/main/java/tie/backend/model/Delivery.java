@@ -47,8 +47,8 @@ public class Delivery {
     @Column(name = "status")
     private String status;
 
-    @Column(name = "registeryD")
-    private String registeryDate;
+    @Column(name = "registryD")
+    private String registryDate;
 
     @Column(name = "deliveryD")
     private String deliveryDate;
@@ -66,9 +66,16 @@ public class Delivery {
         this.pickupPoint = pickupPoint;
         this.store = store;
         this.status = "DISPATCHED";
-        this.registeryDate = LocalDate.now().toString();
+        this.registryDate = LocalDate.now().toString();
         this.deliveryDate = null;
         this.pickupDate = null;
+    }
+
+    public void update(Delivery delivery) {
+        this.status = delivery.getStatus();
+        this.registryDate = delivery.getregistryDate();
+        this.deliveryDate = delivery.getDeliveryDate();
+        this.pickupDate = delivery.getPickupDate();
     }
 
     // GETTERS
@@ -88,8 +95,8 @@ public class Delivery {
     public PickupPoint getPickupPoint() {
         return pickupPoint;
     }
-    public String getRegisteryDate() {
-        return registeryDate;
+    public String getregistryDate() {
+        return registryDate;
     }
     public String getStatus() {
         return status;
@@ -121,8 +128,8 @@ public class Delivery {
     public void setPickupPoint(PickupPoint pickupPoint) {
         this.pickupPoint = pickupPoint;
     }
-    public void setRegisteryDate(String registeryDate) {
-        this.registeryDate = registeryDate;
+    public void setregistryDate(String registryDate) {
+        this.registryDate = registryDate;
     }
     public void setStatus(String status) {
         this.status = status;
@@ -153,14 +160,14 @@ public class Delivery {
                 Objects.equals(pickupPoint, delivery.pickupPoint) &&
                 Objects.equals(store, delivery.store) && 
                 Objects.equals(status, delivery.status) && 
-                Objects.equals(registeryDate, delivery.registeryDate) && 
+                Objects.equals(registryDate, delivery.registryDate) && 
                 Objects.equals(deliveryDate, delivery.deliveryDate) && 
                 Objects.equals(pickupDate, delivery.pickupDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userEmail, userName, packageId, pickupPoint, store, status, registeryDate, deliveryDate, pickupDate);
+        return Objects.hash(userEmail, userName, packageId, pickupPoint, store, status, registryDate, deliveryDate, pickupDate);
     }
 
     // STRING REPRESENTATION
@@ -175,7 +182,7 @@ public class Delivery {
                 "pickupPoint='" + getPickupPoint() + "', " +
                 "store='" + getStore() + "', " +
                 "status='" + getStatus() + "', " +
-                "registeryDate='" + getRegisteryDate() + "', " +
+                "registryDate='" + getregistryDate() + "', " +
                 "deliveryDate='" + getDeliveryDate() + "'" +
                 "pickupDate='" + getPickupDate() + "'" +
                 "}";

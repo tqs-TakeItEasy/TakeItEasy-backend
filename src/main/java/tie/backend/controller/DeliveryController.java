@@ -85,7 +85,6 @@ public class DeliveryController{
                     store.get()
                 );
                 Delivery newDelivery = deliveryService.addDelivery(delivery);
-                System.out.println(newDelivery);
                 return ResponseEntity.ok().body(new PackageDTO(newDelivery.getId()));
             }
             return ResponseEntity.badRequest().build();

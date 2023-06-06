@@ -1,11 +1,16 @@
-FROM maven:3.6.3-jdk-8-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
-
-FROM openjdk:17
-WORKDIR /home/app
-ARG JAR_FILE=target/*.jar
-COPY ${JAR_FILE} app.jar
+# Use a base image with JDK installed
+FROM adoptopenjdk:11-jdk-hotspot
+# Set the working directory
+WORKDIR /app
+# Copy the Maven executable to the container
+COPY mvnw .
+COPY .mvn .mvn
+# Copy the project descriptor files
+COPY pom.xml .
+COPY src src
+# Build the application
+RUN ./mvnw package
+# Expose the port that the application will run on
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/app.jar"]
+# Set the entrypoint command to run the application
+ENTRYPOINT ["java", "-jar", "target/backend-0.0.1-SNAPSHOT.jar"]

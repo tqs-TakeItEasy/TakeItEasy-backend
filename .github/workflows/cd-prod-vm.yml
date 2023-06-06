@@ -24,12 +24,14 @@ jobs:
           rm -rf code
 
           # Copy code and Dockerfile to the VM
+          ls
           mkdir code
           cp -r ./* code/
+
 
           # Build and run the Docker image on the VM
           cd code
           docker build -t takeiteasy-backend .
           docker stop tie-backend || true
           docker rm tie-backend || true
-          docker run -d --name tie-backend -p 8080:8080 takeiteasy-backend:latest
+          docker run -d --name tie-backend -p 8080:8080 takeiteasy-backend

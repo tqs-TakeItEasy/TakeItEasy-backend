@@ -24,9 +24,8 @@ jobs:
           rm -rf code
 
           # Copy code and Dockerfile to the VM
-          ls
           mkdir code
-          cp -r ./* code/
+          cp -r !(code) code/
 
 
           # Build and run the Docker image on the VM

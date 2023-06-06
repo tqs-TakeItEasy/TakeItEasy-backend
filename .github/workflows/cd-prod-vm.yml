@@ -20,16 +20,7 @@ jobs:
         username: ${{ secrets.VM_USERNAME }}
         password: ${{ secrets.VM_PASSWD }}
         script: |
-          # Remove previous code and Dockerfile
-          rm -rf code
-
-          # Copy code and Dockerfile to the VM
-          mkdir code
-          cp -r !(code) code/
-
-
           # Build and run the Docker image on the VM
-          cd code
           docker build -t takeiteasy-backend .
           docker stop tie-backend || true
           docker rm tie-backend || true

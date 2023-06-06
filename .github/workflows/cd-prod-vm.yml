@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.VM_USERNAME }}
         password: ${{ secrets.VM_PASSWD }}
         script: |
-          cd _work
+          cd ~/actions-runner/_work
           # Build and run the Docker image on the VM
           docker build -t takeiteasy-backend .
           docker stop tie-backend || true

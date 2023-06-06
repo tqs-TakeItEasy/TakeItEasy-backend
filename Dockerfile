@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 # Copy the project descriptor files
 # Build the application
-RUN ./mvnw package
+RUN mvn package
 # Expose the port that the application will run on
 EXPOSE 8080
 # Set the entrypoint command to run the application

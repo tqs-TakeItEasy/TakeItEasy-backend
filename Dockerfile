@@ -3,11 +3,8 @@ FROM openjdk:17-jdk-slim
 # Set the working directory
 WORKDIR /app
 # Copy the Maven executable to the container
-COPY mvnw .
-COPY .mvn .mvn
+COPY . .
 # Copy the project descriptor files
-COPY pom.xml .
-COPY src src
 # Build the application
 RUN ./mvnw package
 # Expose the port that the application will run on

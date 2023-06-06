@@ -1,5 +1,5 @@
 # Use a base image with JDK installed
-FROM openjdk:17-jdk-slim
+FROM maven:3.8.4-openjdk-17-slim
 # Set the working directory
 WORKDIR /app
 # Copy the Maven executable to the container

@@ -1,5 +1,5 @@
 # Use a base image with JDK installed
-FROM adoptopenjdk:17-jdk-hotspot
+FROM openjdk:17-jdk-slim
 # Set the working directory
 WORKDIR /app
 # Copy the Maven executable to the container

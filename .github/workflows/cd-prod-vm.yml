@@ -1,0 +1,33 @@
+name: Continuous Deployment VM
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v2
+      with:
+        context: .
+        push: true
+        tags: takeiteasy-backend:latest
+
+    - name: SSH into the VM and deploy
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.VM_HOST }}
+        username: ${{ secrets.VM_USERNAME }}
+        password: ${{ secrets.VM_PASSWD }}
+        script: |
+          docker stop tie-backend || true
+          docker rm tie-backend || true
+          docker pull takeiteasy-backend:latest
+          docker run -d --name tie-backend -p 8080:8080 takeiteasy-backend:latest
